@@ -5,6 +5,7 @@
     
     <link rel="stylesheet" href="../css/style.css" />
     <link rel="stylesheet" href="../css/reset.css" />
+    <script type="module" src="../scripts/script.js"></script>
   </head>
   <body>
     <div class="screen" id="main-screen">
@@ -13,14 +14,14 @@
         <img class="liar-game" src="../img/liar-game.svg" />
         <div class="overlap-group">
           <div class="rectangle"></div>
-          <button class="text-wrapper" onclick="createRoom()">방 만들기</button>
+          <button class="text-wrapper" onclick="createRoom(this)">방 만들기</button>
         </div>
         <div class="overlap">
           <div class="rectangle-2"></div>
-          <div class="text-wrapper" onclick="joinRoom()">참가하기</div>
+          <button class="text-wrapper" onclick="joinRoom(this)">참가하기</div>
         </div>
       </div>
     </div>
-    <script src="../scripts\script.js"></script>
+    
   </body>
 </html>
