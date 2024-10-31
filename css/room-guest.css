@@ -1,0 +1,151 @@
+.screen {
+    background-color: #ffffff;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    width: 100%;
+  }
+  
+  .screen .div {
+    background-color: #ffffff;
+    width: 1512px;
+    height: 982px;
+    position: relative;
+  }
+  
+  .screen .image {
+    position: absolute;
+    width: 647px;
+    height: 101px;
+    top: 390px;
+    left: 432px;
+  }
+  
+  .screen .text-wrapper {
+    width: 647px;
+    top: 389px;
+    left: 432px;
+    font-family: "Inter-Bold", Helvetica;
+    font-weight: 700;
+    color: #000000;
+    font-size: 80px;
+    position: absolute;
+    text-align: center;
+    letter-spacing: 0;
+    line-height: normal;
+  }
+  
+  .screen .group {
+    position: absolute;
+    width: 394px;
+    height: 100px;
+    top: 563px;
+    left: 558px;
+  }
+  
+  .screen .overlap-group {
+    position: relative;
+    width: 392px;
+    height: 100px;
+  }
+  
+  .screen .rectangle {
+    position: absolute;
+    width: 389px;
+    height: 89px;
+    top: 0;
+    left: 3px;
+    background-color: #f4f4f4;
+    border-radius: 20px;
+  }
+  
+  .screen .text-wrapper-2 {
+    width: 392px;
+    top: 25px;
+    left: 0;
+    font-family: "Inter", Helvetica;
+    font-weight: 100;
+    color: #a6a6a6;
+    font-size: 30px;
+    position: absolute;
+    text-align: center;
+    letter-spacing: 0;
+    line-height: normal;
+  }
+  
+  .screen .overlap-wrapper {
+    position: absolute;
+    width: 125px;
+    height: 71px;
+    top: 681px;
+    left: 622px;
+  }
+  
+  .screen .overlap {
+    position: relative;
+    width: 123px;
+    height: 71px;
+    background-color: #f4f4f4;
+    border-radius: 20px;
+    border: none; /* 테두리 없음 */
+    cursor: pointer; /* 커서 포인터 */
+    padding: 0; /* 기본 패딩 제거 */
+  }
+  
+  .screen .text-wrapper-3 {
+    width: 73px;
+    top: 18px;
+    left: 25px;
+    font-family: "Inter", Helvetica;
+    font-weight: 100;
+    color: #000000;
+    font-size: 30px;
+    white-space: nowrap;
+    font-style: normal;
+    position: absolute;
+    text-align: center;
+    letter-spacing: 0;
+    line-height: normal;
+  }
+  
+  .screen .overlap-group-wrapper {
+    position: absolute;
+    width: 125px;
+    height: 71px;
+    top: 681px;
+    left: 756px;
+    border: none; /* 테두리 없음 */
+    cursor: pointer; /* 커서 포인터 */
+    padding: 0; /* 기본 패딩 제거 */
+  }
+  
+  .screen .text-wrapper-4 {
+    width: 73px;
+    top: 18px;
+    left: 25px;
+    font-family: "Inter", Helvetica;
+    font-weight: 100;
+    color: #a6a6a6;
+    font-size: 30px;
+    white-space: nowrap;
+    position: absolute;
+    text-align: center;
+    letter-spacing: 0;
+    line-height: normal;
+  }
+  
+  .text-input {
+    position: absolute; /* 필요에 따라 조정 */
+    width: 100%; /* 사각형 안에 꽉 차게 */
+    height: 50px; /* 원하는 높이 */
+    top: 25px; /* 사각형 안에서의 위치 */
+    left: 0; /* 사각형 안에서의 위치 */
+    border: none; /* 기본 테두리 없애기 */
+    background-color: transparent; /* 배경 투명 */
+    font-family: "Inter-Thin", Helvetica; /* 기존 폰트 스타일 */
+    font-size: 30px; /* 기존 폰트 크기 */
+    color: #a6a6a6; /* 기존 텍스트 색상 */
+    text-align: center; /* 가운데 정렬 */
+    outline: none; /* 포커스 시 아웃라인 없애기 */
+  }
+  
