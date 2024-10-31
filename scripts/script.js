@@ -10,5 +10,5 @@ function createRoom() {
 function joinRoom() {
   isHost = false; // 참가하기 클릭 시 isHost는 false
   localStorage.setItem('isHost', isHost); // isHost 값을 로컬 저장소에 저장
-  location.href = '../html/room-entry.html'; // 참가하기 후 페이지 이동
+  location.href = '../html/room-guest.html'; // 참가하기 후 페이지 이동
 }
