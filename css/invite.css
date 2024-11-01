@@ -115,7 +115,7 @@
     width: 392px;
     height: 93px;
     top: calc(50% + 250px); /* text 요소 아래 45px 위치 */
-    left: 35%;
+    left: 30%;
   }
 
   .screen .bottom-btn2 {
@@ -123,7 +123,7 @@
     width: 392px;
     height: 93px;
     top: calc(50% + 250px); /* text 요소 아래 45px 위치 */
-    right: 35%;
+    right: 30%;
   }
 
 
