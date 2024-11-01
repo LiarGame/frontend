@@ -3,6 +3,10 @@
    License: none (public domain)
 */
 
+* {
+    box-sizing: border-box; /* 모든 요소의 박스 모델을 border-box로 설정 */
+}
+
 html, body, div, span, applet, object, iframe,
 h1, h2, h3, h4, h5, h6, p, blockquote, pre,
 a, abbr, acronym, address, big, cite, code,

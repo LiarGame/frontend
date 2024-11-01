@@ -3,7 +3,8 @@ window. isHost = false; // 방장 여부
 localStorage.getItem('isHost') === 'true' ? isHost = true : isHost = false; 
 let roomCode = 12345; // 임시 방 코드
 
-const storedPlayerList = localStorage.getItem('playerList');
+//const storedPlayerList = localStorage.getItem('playerList');
+window.storedPlayerList = ['User1', 'User2', 'User3', 'User4', 'User5'];
 
 // 가져온 플레이어 리스트 출력
 if (storedPlayerList) {
@@ -62,4 +63,33 @@ window.joinRoom = function() { // 전역 함수로 설정
   localStorage.setItem('isHost', isHost); // isHost 값을 로컬 저장소에 저장
   location.href = '../html/room-guest.html'; // 참가하기 후 페이지 이동
 };
+
+document.addEventListener("DOMContentLoaded", function() {
+  // invite.html에서만 실행되도록 페이지 확인
+  if (window.location.pathname.endsWith('invite.html')) {
+      // localStorage에서 플레이어 리스트 가져오기
+      // const storedPlayerList = localStorage.getItem('playerList');
+      console.log(123)
+      // userListContainer 요소 선택
+      const userListContainer = document.getElementById('userList');
+
+      // 플레이어 리스트가 존재할 경우 렌더링
+      if (storedPlayerList) {
+          try {
+              // const players = JSON.parse(storedPlayerList); // JSON 파싱
+              storedPlayerList.forEach(player => {
+                  const playerElement = document.createElement('button');
+                  playerElement.className = 'overlap-group111 btn-16'; // 여러 클래스 이름 추가
+                  playerElement.textContent = player;
+                  userListContainer.appendChild(playerElement);
+              });
+          } catch (error) {
+              console.error("플레이어 리스트 파싱 실패:", error);
+          }
+      } else {
+          console.log('저장된 플레이어 리스트가 없습니다.');
+      }
+  }
+});
+
 
