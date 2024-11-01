@@ -15,20 +15,6 @@ if (storedPlayerList) {
 
 console.log('isHost 초기값:', isHost); // 출력용 로그
 
-function setupMessageHandler() {
-  if (socket) {
-      socket.onmessage = function(event) {
-          const message = JSON.parse(event.data);
-          if (message.type === 'ROOM_CREATED') {
-              roomCode = message.roomCode;
-              localStorage.setItem('roomCode', roomCode);
-              console.log('방 코드가 저장되었습니다:', roomCode);
-          }
-      };
-  }
-}
-
-
 window.createRoom = function() { // 전역 함수로 설정
   isHost = true;
   localStorage.setItem('isHost', isHost); // isHost 값을 로컬 저장소에 저장
@@ -75,18 +61,20 @@ window.cancelRoom = function() {
 document.addEventListener("DOMContentLoaded", function() {
   // invite.html에서만 실행되도록 페이지 확인
   if (window.location.pathname.endsWith('invite.html')) {
-      renderPlayerList(); // 페이지 로드 시 플레이어 리스트 렌더링
+      console.log("등장")
+      window.renderPlayerList(); // 페이지 로드 시 플레이어 리스트 렌더링
   }
 });
 
 window.renderPlayerList = function() {
-  const storedPlayerList = localStorage.getItem('playerList');
+  // 연결되면 추가
+  //const storedPlayerList = localStorage.getItem('playerList'); 
   const userListContainer = document.getElementById('userList');
   userListContainer.innerHTML = ''; // 기존 내용 초기화
 
   if (storedPlayerList) {
-      const players = JSON.parse(storedPlayerList);
-      players.forEach(player => {
+      // const players = JSON.parse(storedPlayerList);
+      storedPlayerList.forEach(player => {
           const playerElement = document.createElement('button');
           playerElement.className = 'overlap-group111 btn-16'; // 여러 클래스 이름 추가
           playerElement.textContent = player;

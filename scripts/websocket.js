@@ -34,11 +34,10 @@ function createSocket() {
                 // JOIN 요청에 대한 응답 처리
                 const playerList = message.playerList.join(", "); // 플레이어 리스트 문자열로 변환
                 localStorage.setItem('playerList', playerList); // 플레이어 리스트 저장
-                renderPlayerList()
+                window.renderPlayerList(); // 플레이어 렌더링
                 const roomCode = message.roomCode;
 
                 console.log(`방 코드: ${roomCode}, 플레이어 리스트: ${playerList}`);
-                // 추가적인 UI 업데이트 또는 로직을 여기에 추가할 수 있습니다.
             }
         };
     }
