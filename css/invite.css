@@ -183,3 +183,58 @@
 .screen .overlap-group111:hover {
     background-color: #e0e0e0; /* 호버 시 배경 색상 변경 */
 }
+
+
+/* 모달 배경 스타일 */
+.modal-overlay {
+    display: none; /* 기본적으로 숨김 */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5); /* 반투명 검정색 배경 */
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+/* 모달 콘텐츠 스타일 */
+.modal-content {
+    color: #000;
+    text-align: center;
+    font-family: Inter;
+    font-size: 30px;
+    font-style: normal;
+    font-weight: 100;
+    line-height: normal;
+    background: #fff;
+    padding: 20px;
+    width: 500px;
+    border-radius: 10px;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* 버튼 스타일 */
+.modal-buttons {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 20px;
+}
+
+.modal-buttons button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#cancelButton {
+    background: #ccc;
+}
+
+#confirmButton {
+    background: #000;
+    color: #fff;
+}
