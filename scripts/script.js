@@ -124,6 +124,6 @@ window.closeModal = function() {
 
 window.startGame = function() {
   closeModal();
-  // 게임 시작 로직을 여기에 추가
+  location.href = '../html/keyword.html';
   console.log("게임이 시작됩니다.");
 };
