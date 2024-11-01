@@ -86,31 +86,35 @@ window.renderPlayerList = function() {
 };
 
 window.openModal = function() {
+  if(!isHost){
+    console.log("방장이 아니라 게임을 시작할 수 없습니다.")
+    return;
+  }
   document.getElementById("modalOverlay").style.display = "flex";
 
-  // bottom-btn1과 bottom-btn2 클래스를 가진 요소를 숨기기
+  // bottom-btn과 bottom-btn2 클래스를 가진 요소를 숨기기
   const btn1Element = document.querySelector(".bottom-btn");
   const btn2Element = document.querySelector(".bottom-btn2");
 
-  // bottom-btn1 요소 숨기기
+  // bottom-btn 요소 숨기기
   if (btn1Element) {
-    btn1Element.style.display = "none"; // display를 none으로 설정
+    btn1Element.style.display = "none"; 
   }
 
   // bottom-btn2 요소 숨기기
   if (btn2Element) {
-    btn2Element.style.display = "none"; // display를 none으로 설정
+    btn2Element.style.display = "none"; 
   }
 };
 
 window.closeModal = function() {
   document.getElementById("modalOverlay").style.display = "none";
 
-  // bottom-btn1과 bottom-btn2 요소 다시 보이기
+  // bottom-btn과 bottom-btn2 요소 다시 보이기
   const btn1Element = document.querySelector(".bottom-btn");
   const btn2Element = document.querySelector(".bottom-btn2");
 
-  // bottom-btn1 요소 보이기
+  // bottom-btn 요소 보이기
   if (btn1Element) {
     btn1Element.style.display = ""; // display를 초기화하여 보이게 함
   }
@@ -121,7 +125,7 @@ window.closeModal = function() {
   }
 };
 
-
+// 초대창 -> 게임 시작 
 window.startGame = function() {
   closeModal();
   location.href = '../html/keyword.html';
