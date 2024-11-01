@@ -22,6 +22,24 @@ function createSocket() {
             localStorage.setItem('socketState', 'closed');
             socket = null; // 소켓이 닫히면 null로 설정
         };
+
+        // 이벤트 핸들러 등록
+        socket.onmessage = function(event) {
+            const message = JSON.parse(event.data);
+            if (message.type === 'ROOM_CREATED') {
+                const roomCode = message.roomCode;
+                localStorage.setItem('roomCode', roomCode);
+                console.log('방 코드가 저장되었습니다:', roomCode);
+            } else if (message.type === 'JOIN') {
+                // JOIN 요청에 대한 응답 처리
+                const playerList = message.playerList.join(", "); // 플레이어 리스트 문자열로 변환
+                localStorage.setItem('playerList', playerList); // 플레이어 리스트 저장
+                window.renderPlayerList(); // 플레이어 렌더링
+                const roomCode = message.roomCode;
+
+                console.log(`방 코드: ${roomCode}, 플레이어 리스트: ${playerList}`);
+            }
+        };
     }
     return socket;
 }

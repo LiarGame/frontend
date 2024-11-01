@@ -7,9 +7,9 @@
 </head>
 <body>
     <div class="screen">
-        <div class="div">
+        <div class="div2">
             <div class="overlap">
-                <div class="overlap-group" id="userList">안녕</div>
+                <div class="user-list-container" id="userList"></div>
                 <div class="text-wrapper-2">플레이어</div>
             </div>
             <div class="text">아래의 방 번호를 공유하세요!</div>
@@ -17,18 +17,27 @@
 
             <div class="bottom-btn">
                 <div class="rectangle"></div>
-                <button class="btn-text" onclick="createRoom()">취소</button>
+                <button class="btn-text" onclick="cancelRoom()">취소</button>
             </div>  
 
             <div class="bottom-btn2">
                 <div class="rectangle"></div>
-                <button class="btn-text" onclick="createRoom()">게임시작</button>
+                <button class="btn-text" onclick="openModal()">게임시작</button>
             </div>  
-            
-              
         </div>
     </div>
-    <script type="module" src="../scripts/script.js"></script>
 
+    <!-- 모달 -->
+    <div id="modalOverlay" class="modal-overlay">
+        <div class="modal-content">
+            <p>모든 플레이어가 입장했는지 확인해주세요.<br>게임을 시작하겠습니까?</p>
+            <div class="modal-buttons">
+                <button id="cancelButton" onclick="closeModal()">취소</button>
+                <button id="confirmButton" onclick="startGame()">확인</button>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="../scripts/script.js"></script>
 </body>
 </html>
