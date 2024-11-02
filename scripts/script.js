@@ -1,7 +1,7 @@
 import { getSocket } from '../scripts/websocket.js';
 
 window.onload = function () {
-  input();
+  input(); //이름 입력에 반응하는 함수
 }
 
 window. isHost = false; // 방장 여부
@@ -144,33 +144,15 @@ window.startGame = function() {
   contentDiv.appendChild(pTag);
   console.log("게임이 시작됩니다.");
 
-  const timeText = document.createElement('p');
-  timeText.classList.add("timeText");
-  contentDiv.appendChild(timeText);
-  timeText.textContent = "10";
-  startCountdown(timeText,10);
-
-  //5초 후에 사라지고 제시어 설명 시작
+  //3초 후에 위치 이동
   setTimeout(() => {
-    contentDiv.removeChild(pTag);
-  }, 5000);
-}
-
-function startCountdown(timeDiv, time) {
-  let timeText = time;
-  const countdown = setInterval(() => {
-    timeText -= 1; // 1초씩 감소
-    timeDiv.textContent = timeText; // timeText 요소에 새로운 값 업데이트
-
-    // 시간이 0이 되면 타이머 중지
-    if (timeText <= 0) {
-      clearInterval(countdown); // setInterval 중지
-    }
-  }, 1000); // 1000 밀리초 = 1초
-}
-
-function setTimeout(parent, child) {
-  parent.removeChild(child);
+    pTag.style.transition = "transform 1s ease"; // 이동 시 부드러운 효과
+    pTag.style.transform = "translate(-50%, -550%)";
+  }, 3000);
+  //4.5초 후에 제시어 설명 시작
+  setTimeout(() => {
+    explainKeyword();
+  }, 4000);
 }
 
 window.input = function () {
@@ -182,6 +164,7 @@ window.input = function () {
 
   nameInput.addEventListener('input', () => {
     if (nameInput.value.length > 0) {
+      nameInput.style.color = "black";
       text.style.color = "black"; // 입력이 있으면 색상을 검정으로
       enterButton.disabled = false;
     } else {
@@ -190,6 +173,15 @@ window.input = function () {
       enterButton.disabled = true;
     }
   });
+}
+
+window.explainKeyword = function () {
+  const contentDiv = document.querySelector('.content');
+  const chatDiv = document.querySelector('#chatDiv');
+  contentDiv.appendChild(chatDiv);
+    if (chatDiv) {
+      chatDiv.style.display = "block";
+    }
 }
 
 
