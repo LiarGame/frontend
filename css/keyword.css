@@ -1,19 +1,18 @@
 .box {
-    width: 1512px;
-    height: 982px;
+    width: 100%;
+    height: 100%;
 }
 
 .box .group {
     position: fixed;
-    width: 1512px;
-    height: 982px;
+    width: 100%;
+    height: 100%;
     top: 0;
     left: 0;
 }
 
 .box .view {
     position: relative;
-    height: 982px;
     background-color: #ffffff;
 }
 

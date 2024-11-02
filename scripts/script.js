@@ -1,4 +1,9 @@
 import { getSocket } from '../scripts/websocket.js';
+
+window.onload = function () {
+  input();
+}
+
 window. isHost = false; // 방장 여부
 localStorage.getItem('isHost') === 'true' ? isHost = true : isHost = false; 
 let roomCode = 12345; // 임시 방 코드
@@ -128,6 +133,64 @@ window.closeModal = function() {
 // 초대창 -> 게임 시작 
 window.startGame = function() {
   closeModal();
-  location.href = '../html/keyword.html';
+  // location.href = '../html/keyword.html';
+  const contentDiv = document.querySelector('.content');
+  contentDiv.innerHTML = '';
+
+  //제시어 공개
+  const pTag = document.createElement('p');
+  pTag.classList.add("pTag");
+  pTag.textContent = "주제는 \"동물\"이고 제시어는 \"하마\" 입니다";
+  contentDiv.appendChild(pTag);
   console.log("게임이 시작됩니다.");
-};
+
+  const timeText = document.createElement('p');
+  timeText.classList.add("timeText");
+  contentDiv.appendChild(timeText);
+  timeText.textContent = "10";
+  startCountdown(timeText,10);
+
+  //5초 후에 사라지고 제시어 설명 시작
+  setTimeout(() => {
+    contentDiv.removeChild(pTag);
+  }, 5000);
+}
+
+function startCountdown(timeDiv, time) {
+  let timeText = time;
+  const countdown = setInterval(() => {
+    timeText -= 1; // 1초씩 감소
+    timeDiv.textContent = timeText; // timeText 요소에 새로운 값 업데이트
+
+    // 시간이 0이 되면 타이머 중지
+    if (timeText <= 0) {
+      clearInterval(countdown); // setInterval 중지
+    }
+  }, 1000); // 1000 밀리초 = 1초
+}
+
+function setTimeout(parent, child) {
+  parent.removeChild(child);
+}
+
+window.input = function () {
+  const nameInput = document.getElementById('name-input');
+  const text = document.querySelector('.text-wrapper-4');
+  const enterButton = document.querySelector('.overlap-group-wrapper button');
+
+  enterButton.disabled = true;
+
+  nameInput.addEventListener('input', () => {
+    if (nameInput.value.length > 0) {
+      text.style.color = "black"; // 입력이 있으면 색상을 검정으로
+      enterButton.disabled = false;
+    } else {
+      text.style.color = "gray"; // 입력이 없으면 회색으로 (기본 색상)
+      text.style.cursor = "default";
+      enterButton.disabled = true;
+    }
+  });
+}
+
+
+
