@@ -146,7 +146,6 @@
   background-color: transparent; /* 배경 투명 */
   font-family: "Inter-Thin", Helvetica; /* 기존 폰트 스타일 */
   font-size: 30px; /* 기존 폰트 크기 */
-  color: #a6a6a6; /* 기존 텍스트 색상 */
   text-align: center; /* 가운데 정렬 */
   outline: none; /* 포커스 시 아웃라인 없애기 */
 }

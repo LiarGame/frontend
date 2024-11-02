@@ -51,22 +51,16 @@
 </div>
 
 <div id="chatDiv" style="display: none;">
-    채팅 창 만드는 중
-    <!--    <div class="group">-->
-    <!--        <p class="div"><span class="text-wrapper">임재형&nbsp;&nbsp; </span> <span class="span">포동포동해</span></p>-->
-    <!--        <p class="p"><span class="text-wrapper">조성현&nbsp;&nbsp; </span> <span class="span">수박을 좋아해</span></p>-->
-    <!--        <p class="div-2">-->
-    <!--            <span class="text-wrapper">황혜령&nbsp;&nbsp; </span> <span class="span">잘 모르는 단어야</span>-->
-    <!--        </p>-->
-    <!--        <div class="overlap">-->
-    <!--            <div class="line-wrapper"><img class="line" src="img/line-1.svg" /></div>-->
-    <!--            <div class="group-wrapper"><img class="img" src="img/group-8.png" /></div>-->
-    <!--        </div>-->
-    <!--        <div class="overlap-group">-->
-    <!--            <div class="group-2"></div>-->
-    <!--            <div class="text-wrapper-2">귀여워</div>-->
-    <!--        </div>-->
-    <!--    </div>-->
+    <!--    채팅 생기는 영역-->
+    <div class="chat-messages" id="chatMessages">
+
+    </div>
+
+    <!-- 메시지 입력 필드 -->
+    <div class="chat-input-area">
+        <input type="text" id="chatInput" placeholder="메시지를 입력하세요" />
+        <img id="chatSender" src="../img/msg-send.png" onclick="sendMessage()"/>
+    </div>
 </div>
 
 <script type="module" src="../scripts/script.js"></script>
