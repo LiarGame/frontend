@@ -9,35 +9,24 @@
 
 <body>
     <div class="screen">
-        <div class="div">
-            <img class="image" src="../img/liar-game-enter.svg" />
-            <div class="group">
-                <div class="overlap-group">
-                    <div class="rectangle"></div>
-                    <input type="text" class="text-input" id="name-input" placeholder="이름을 입력해주세요" />
-                </div>
-            </div>
-            <div class="group2">
-                <div class="overlap-group2">
-                    <div class="rectangle-2"></div>
-                    <input type="text" class="text-input" id="room-input" placeholder="방 번호를 입력해주세요" />
-                </div>
-            </div>
-            <div class="overlap-wrapper">
-                <button class="overlap" onclick="location.href='index.html'">
-                    <div class="text-wrapper-3">취소</div>
-                </button>
-            </div>
-            <div class="overlap-group-wrapper">
-                <button class="overlap" onclick="sendGuest(document.getElementById('name-input').value, document.getElementById('room-input').value)">
-                    <div class="text-wrapper-4">입장</div>
-                </button>                
-            </div>
+        <img class="image" src="../img/liar-game-enter.svg" />
+        <div class="rectangle">
+            <input type="text" class="text-input" id="name-input" placeholder="이름을 입력해주세요" />
+        </div>
+
+        <div class="rectangle">
+            <input type="text" class="text-input" id="room-input" placeholder="방 번호를 입력해주세요" />
+        </div>
+        <div class="overlap-wrapper">
+            <button class="overlap" onclick="location.href='index.html'">
+                <div class="text-wrapper-3">취소</div>
+            </button>
+
+            <button id="enterButton" class="overlap" onclick="sendGuest(document.getElementById('name-input').value, document.getElementById('room-input').value)">
+                <div class="text-wrapper-4">입장</div>
+            </button>
         </div>
     </div>
     <script type="module" src="../scripts/script.js"></script>
-
-
 </body>
-
 </html>

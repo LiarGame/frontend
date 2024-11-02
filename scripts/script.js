@@ -1,8 +1,5 @@
 import { getSocket } from '../scripts/websocket.js';
 
-window.onload = function () {
-  input(); //이름 입력에 반응하는 함수
-}
 
 window. isHost = false; // 방장 여부
 localStorage.getItem('isHost') === 'true' ? isHost = true : isHost = false; 
@@ -157,22 +154,34 @@ window.startGame = function() {
 
 window.input = function () {
   const nameInput = document.getElementById('name-input');
+  const roomInput = document.getElementById('room-input');
   const text = document.querySelector('.text-wrapper-4');
-  const enterButton = document.querySelector('.overlap-group-wrapper button');
+  const enterButton = document.querySelector('#enterButton');
 
   enterButton.disabled = true;
+  enterButton.style.color = "gray";
+  enterButton.style.cursor = "default";
 
-  nameInput.addEventListener('input', () => {
-    if (nameInput.value.length > 0) {
+  // 입력 이벤트 리스너 추가
+  function checkInput() {
+    if(nameInput.value.length > 0) {
       nameInput.style.color = "black";
-      text.style.color = "black"; // 입력이 있으면 색상을 검정으로
-      enterButton.disabled = false;
+      if (roomInput.value.length > 0) {
+        roomInput.style.color = "black";
+        enterButton.style.color = "black";
+        enterButton.style.cursor = "pointer";
+        enterButton.disabled = false;
+      }
     } else {
-      text.style.color = "gray"; // 입력이 없으면 회색으로 (기본 색상)
-      text.style.cursor = "default";
+      enterButton.style.color = "gray";
+      enterButton.style.cursor = "default";
       enterButton.disabled = true;
     }
-  });
+  }
+  // 각 입력 필드에 이벤트 리스너 추가
+  nameInput.addEventListener('input', checkInput);
+  roomInput.addEventListener('input', checkInput);
+
 }
 
 window.explainKeyword = function () {
