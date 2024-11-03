@@ -230,9 +230,6 @@ window.sendMessage = function (){
 }
 
 
-
-};
-
 // 최종 답 보내기
 window.sendFinalAnswer = function() {
   const inputValue = document.querySelector('input[type="text"]').value; // 입력 필드의 값을 가져옴
