@@ -1,0 +1,79 @@
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    background-color: #f0f0f0;
+}
+
+.container {
+    text-align: center;
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    padding: 40px;
+    width: 90%;
+   
+    max-width: 400px;
+}
+
+
+.header {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.message {
+    font-size: 18px;
+    margin: 10px 0;
+    line-height: 1.5;
+}
+
+.input-container {
+    margin-top: 30px;
+    display: flex;
+    justify-content: center;
+}
+
+input[type="text"] {
+    width: calc(100% - 40px);
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 20px;
+    font-size: 16px;
+}
+
+
+
+.title {
+    font-weight: 600;
+    font-size: 16px;
+}
+
+.box {
+    width: 58px;
+    height: 58px;
+    position: relative; /* 자식 요소에 대해 절대 위치를 설정할 수 있도록 */
+}
+
+.box .ellipse {
+    width: 58px;
+    height: 58px;
+    display: block; /* 블록 요소로 설정 */
+}
+
+.box2 {
+    position: absolute; /* 부모 요소에 대해 절대 위치 지정 */
+    top: 51%; /* 수직 중앙 정렬 */
+    left: 35%; /* 수평 중앙 정렬 */
+    transform: translate(-50%, -50%); /* 중앙 정렬을 위한 변환 */
+    width: 1px; /* 너비 설정 */
+    height: 23px; /* 높이 설정 */
+}
+
+.box2 .arrow {
+    width: 22px;
+    height: 24px;
+}
