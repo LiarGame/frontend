@@ -57,7 +57,7 @@ body {
 }
 
 input[type="text"] {
-    width: calc(100% - 40px);
+    width: calc(100% - 50px);
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 20px;
@@ -65,34 +65,14 @@ input[type="text"] {
 }
 
 
-
 .title {
     font-weight: 600;
     font-size: 16px;
 }
 
-.box {
-    width: 58px;
-    height: 58px;
-    position: relative; /* 자식 요소에 대해 절대 위치를 설정할 수 있도록 */
-}
-
-.box .ellipse {
-    width: 58px;
-    height: 58px;
-    display: block; /* 블록 요소로 설정 */
-}
-
-.box2 {
-    position: absolute; /* 부모 요소에 대해 절대 위치 지정 */
-    top: 51%; /* 수직 중앙 정렬 */
-    left: 35%; /* 수평 중앙 정렬 */
-    transform: translate(-50%, -50%); /* 중앙 정렬을 위한 변환 */
-    width: 1px; /* 너비 설정 */
-    height: 23px; /* 높이 설정 */
-}
-
 .box2 .arrow {
-    width: 22px;
-    height: 24px;
+    width: 40px;
+    height: 40px;
+    margin-left: 5px;
+    cursor: pointer;
 }
