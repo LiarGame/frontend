@@ -1,4 +1,6 @@
 import { getSocket } from '../scripts/websocket.js';
+
+
 window. isHost = false; // 방장 여부
 localStorage.getItem('isHost') === 'true' ? isHost = true : isHost = false; 
 let roomCode = 12345; // 임시 방 코드
@@ -128,8 +130,107 @@ window.closeModal = function() {
 // 초대창 -> 게임 시작 
 window.startGame = function() {
   closeModal();
-  location.href = '../html/keyword.html';
+  // location.href = '../html/keyword.html';
+  const contentDiv = document.querySelector('.content');
+  contentDiv.innerHTML = '';
+
+  //제시어 공개
+  const pTag = document.createElement('p');
+  pTag.classList.add("pTag");
+  pTag.textContent = "주제는 \"동물\"이고 제시어는 \"하마\" 입니다";
+  contentDiv.appendChild(pTag);
   console.log("게임이 시작됩니다.");
+
+  //3초 후에 위치 이동
+  setTimeout(() => {
+    pTag.style.transition = "transform 1s ease"; // 이동 시 부드러운 효과
+    pTag.style.transform = "translate(-50%, -600%)";
+  }, 3000);
+  //4초 후에 제시어 설명 시작
+  setTimeout(() => {
+    explainKeyword();
+  }, 4000);
+}
+
+//입력값 유무에 따라 버튼 활성화(수정해야댐)
+window.checkInput = function () {
+  const nameInput = document.getElementById('name-input');
+  const roomInput = document.getElementById('room-input');
+  const enterButtonHost = document.querySelector('.overlap-group-wrapper button');
+  const textHost = document.querySelector('.overlap-group-wrapper .text-wrapper-4');
+  const enterButton = document.querySelector('#enterButton');
+
+  enterButtonHost.disabled = true;
+  enterButton.disabled = true;
+  enterButton.style.color = "gray";
+  enterButton.style.cursor = "default";
+
+  function checkInput() {
+    if(nameInput.value.length > 0) {
+      nameInput.style.color = "black";
+      enterButtonHost.disabled = false;
+      textHost.style.color = "black";
+    }
+    if (roomInput.value.length > 0) {
+      roomInput.style.color = "black";
+    }
+    if(nameInput.value.length > 0 && roomInput.value.length > 0) {
+      enterButton.style.color = "black";
+      enterButton.style.cursor = "cursor";
+      enterButton.disabled = false;
+    } else {
+      enterButton.style.color = "gray";
+      enterButton.style.cursor = "default";
+      enterButton.disabled = true;
+    }
+  }
+  nameInput.addEventListener('input', checkInput);
+  roomInput.addEventListener('input', checkInput);
+}
+
+window.checkChatInput = function () {
+  const chatInput = document.getElementById('chatInput');
+
+  function checkChatInput() {
+    const chatSender = document.querySelector(".chat-input-area img");
+
+    if(chatInput.value.length > 0) {
+      chatSender.src = "../img/msg-send-black.png";
+    } else {
+      chatSender.src = "../img/msg-send.png";
+    }
+  }
+  chatInput.addEventListener('input', checkChatInput);
+}
+
+window.explainKeyword = function () {
+  const contentDiv = document.querySelector('.content');
+  const chatDiv = document.querySelector('#chatDiv');
+  contentDiv.appendChild(chatDiv);
+    if (chatDiv) {
+      chatDiv.style.display = "block";
+    }
+}
+
+window.sendMessage = function (){
+  const chatInput = document.getElementById("chatInput");
+  const chatMessages = document.getElementById("chatMessages");
+
+  if (chatInput.value.trim() !== "") {
+    // 새 메시지 추가
+    const message = document.createElement("p");
+    message.classList.add('myMsg');
+    message.innerHTML = `${chatInput.value}`;
+    // <span className="chat-sender">나</span>
+
+    chatMessages.appendChild(message); // 메시지 영역에 추가
+
+    chatInput.value = ""; // 입력 필드 초기화
+  }
+}
+
+
+
 };
 
 // 최종 답 보내기

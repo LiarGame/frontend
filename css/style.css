@@ -1,206 +1,208 @@
 .screen {
-    background-color: #ffffff;
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    width: 100%;
-  }
-  
-  .screen .div {
-    background-color: #ffffff;
-    width: 1512px;
-    height: 982px;
-    position: relative;
-  }
-  
-  .screen .image {
-    position: absolute;
-    width: 472px;
-    height: 101px;
-    top: 384px;
-    left: 517px;
-  }
-  
-  .screen .liar-game {
-    position: absolute;
-    width: 324px;
-    height: 53px;
-    top: 308px;
-    left: 595px;
-  }
-  
-  .screen .overlap-group {
-    position: absolute;
-    width: 392px;
-    height: 93px;
-    top: 558px;
-    left: 558px;
-  }
-  
-  .screen .rectangle {
-    position: absolute;
-    width: 281px;
-    height: 89px;
-    top: 0;
-    left: 56px;
-    background-color: #e8e9eb;
-    border-radius: 20px;
-  }
-  
-  .screen .text-wrapper {
-    position: absolute;
-    width: 392px; /* 버튼 너비 */
-    top: 18px; /* 버튼 위치 */
-    left: 0;
-    font-family: "Inter-Regular", Helvetica;
-    font-weight: 400;
-    color: #000000;
-    font-size: 40px;
-    text-align: center;
-    letter-spacing: 0;
-    line-height: normal;
-    background-color: transparent; /* 배경색 투명 */
-    border: none; /* 테두리 없음 */
-    cursor: pointer; /* 커서 포인터 */
-    padding: 0; /* 기본 패딩 제거 */
-  }
-
-  .screen .text-wrapper:hover {
-    transition: transform 0.2s; /* 부드러운 전환 효과 */
-  }
-
-  .room-entry {
-    background-color: #ffffff;
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    width: 100%;
-  }
-  
-  .room-entry .room-div {
-    background-color: #ffffff;
-    width: 1512px;
-    height: 982px;
-    position: relative;
-  }
-  
-  .room-entry .text-wrapper-room {
-    width: 647px;
-    top: 389px;
-    left: 432px;
-    font-family: "Inter-Bold", Helvetica;
-    font-weight: 700;
-    color: #000000;
-    font-size: 80px;
-    position: absolute;
-    text-align: center;
-    letter-spacing: 0;
-    line-height: normal;
-  }
-  
-  .room-entry .group {
-    position: absolute;
-    width: 394px;
-    height: 100px;
-    top: 563px;
-    left: 558px;
-  }
-  
-  .room-entry .overlap-group-room {
-    position: relative;
-    width: 392px;
-    height: 100px;
-  }
-  
-  .room-entry .rectangle-room {
-    position: absolute;
-    width: 389px;
-    height: 89px;
-    top: 0;
-    left: 3px;
-    background-color: #f4f4f4;
-    border-radius: 20px;
-  }
-  
-  .room-entry .text-wrapper-2 {
-    width: 392px;
-    top: 25px;
-    left: 0;
-    font-family: "Inter-Thin", Helvetica;
-    font-weight: 100;
-    color: #a6a6a6;
-    font-size: 30px;
-    position: absolute;
-    text-align: center;
-    letter-spacing: 0;
-    line-height: normal;
-  }
-  
-  .room-entry .overlap-wrapper {
-    position: absolute;
-    width: 125px;
-    height: 71px;
-    top: 681px;
-    left: 622px;
-  }
-  
-  .room-entry .overlap {
-    position: relative;
-    width: 123px;
-    height: 71px;
-    background-color: #f4f4f4;
-    border-radius: 20px;
-  }
-  
-  .room-entry .text-wrapper-3 {
-    width: 73px;
-    top: 18px;
-    left: 25px;
-    font-family: "Inter-Thin", Helvetica;
-    font-weight: 100;
-    color: #000000;
-    font-size: 30px;
-    white-space: nowrap;
-    position: absolute;
-    text-align: center;
-    letter-spacing: 0;
-    line-height: normal;
-  }
-  
-  .room-entry .overlap-group-wrapper {
-    position: absolute;
-    width: 125px;
-    height: 71px;
-    top: 681px;
-    left: 756px;
-  }
-  
-  .room-entry .text-wrapper-4 {
-    width: 73px;
-    top: 18px;
-    left: 25px;
-    font-family: "Inter-Thin", Helvetica;
-    font-weight: 100;
-    color: #a6a6a6;
-    font-size: 30px;
-    white-space: nowrap;
-    position: absolute;
-    text-align: center;
-    letter-spacing: 0;
-    line-height: normal;
-  }
-
-  .rectangle {
-    position: absolute;
-    width: 389px;
-    height: 89px;
-    top: 0;
-    left: 3px;
-    background-color: #f4f4f4;
-    border-radius: 20px;
+  background-color: #ffffff;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
 }
 
+.screen .div {
+  background-color: #ffffff;
+  width: 1512px;
+  height: 100%;
+  position: relative;
+}
 
+.screen .liar-game {
+  position: absolute;
+  width: 324px;
+  height: 53px;
+  /*top: 308px;*/
+  top: 20%;
+  left: 595px;
+}
+
+.screen .image {
+  position: absolute;
+  width: 472px;
+  height: 101px;
+  /*top: 384px;*/
+  top: 35%;
+  left: 517px;
+}
+
+.screen .overlap-group {
+  position: absolute;
+  width: 392px;
+  height: 93px;
+  /*top: 558px;*/
+  top: 65%;
+  left: 558px;
+}
+
+.screen .rectangle {
+  position: absolute;
+  width: 281px;
+  height: 89px;
+  top: 0;
+  left: 56px;
+  background-color: #e8e9eb;
+  border-radius: 20px;
+}
+
+.screen .text-wrapper {
+  position: absolute;
+  width: 392px; /* 버튼 너비 */
+  top: 18px; /* 버튼 위치 */
+  left: 0;
+  font-family: "Inter-Regular", Helvetica;
+  font-weight: 400;
+  color: #000000;
+  font-size: 40px;
+  text-align: center;
+  letter-spacing: 0;
+  line-height: normal;
+  background-color: transparent; /* 배경색 투명 */
+  border: none; /* 테두리 없음 */
+  cursor: pointer; /* 커서 포인터 */
+  padding: 0; /* 기본 패딩 제거 */
+}
+
+.screen .text-wrapper:hover {
+  transition: transform 0.2s; /* 부드러운 전환 효과 */
+}
+
+.room-entry {
+  background-color: #ffffff;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  width: 100%;
+}
+
+.room-entry .room-div {
+  background-color: #ffffff;
+  width: 1512px;
+  height: 982px;
+  position: relative;
+}
+
+.room-entry .text-wrapper-room {
+  width: 647px;
+  top: 389px;
+  left: 432px;
+  font-family: "Inter-Bold", Helvetica;
+  font-weight: 700;
+  color: #000000;
+  font-size: 80px;
+  position: absolute;
+  text-align: center;
+  letter-spacing: 0;
+  line-height: normal;
+}
+
+.room-entry .group {
+  position: absolute;
+  width: 394px;
+  height: 100px;
+  top: 563px;
+  left: 558px;
+}
+
+.room-entry .overlap-group-room {
+  position: relative;
+  width: 392px;
+  height: 100px;
+}
+
+.room-entry .rectangle-room {
+  position: absolute;
+  width: 389px;
+  height: 89px;
+  top: 0;
+  left: 3px;
+  background-color: #f4f4f4;
+  border-radius: 20px;
+}
+
+.room-entry .text-wrapper-2 {
+  width: 392px;
+  top: 25px;
+  left: 0;
+  font-family: "Inter-Thin", Helvetica;
+  font-weight: 100;
+  color: #a6a6a6;
+  font-size: 30px;
+  position: absolute;
+  text-align: center;
+  letter-spacing: 0;
+  line-height: normal;
+}
+
+.room-entry .overlap-wrapper {
+  position: absolute;
+  width: 125px;
+  height: 71px;
+  top: 681px;
+  left: 622px;
+}
+
+.room-entry .overlap {
+  position: relative;
+  width: 123px;
+  height: 71px;
+  background-color: #f4f4f4;
+  border-radius: 20px;
+}
+
+.room-entry .text-wrapper-3 {
+  width: 73px;
+  top: 18px;
+  left: 25px;
+  font-family: "Inter-Thin", Helvetica;
+  font-weight: 100;
+  color: #000000;
+  font-size: 30px;
+  white-space: nowrap;
+  position: absolute;
+  text-align: center;
+  letter-spacing: 0;
+  line-height: normal;
+}
+
+.room-entry .overlap-group-wrapper {
+  position: absolute;
+  width: 125px;
+  height: 71px;
+  top: 681px;
+  left: 756px;
+}
+
+.room-entry .text-wrapper-4 {
+  width: 73px;
+  top: 18px;
+  left: 25px;
+  font-family: "Inter-Thin", Helvetica;
+  font-weight: 100;
+  color: #a6a6a6;
+  font-size: 30px;
+  white-space: nowrap;
+  position: absolute;
+  text-align: center;
+  letter-spacing: 0;
+  line-height: normal;
+}
+
+.rectangle {
+  position: absolute;
+  width: 389px;
+  height: 89px;
+  top: 0;
+  left: 3px;
+  background-color: #f4f4f4;
+  border-radius: 20px;
+}
 
 .rectangle-2 {
   position: absolute;
@@ -215,14 +217,7 @@
 .screen .overlap {
   position: absolute;
   left : 558px;
-  top: 700px;
+  top: 80%;
   width: 392px;
   height: 89px;
 }
-
-
-
-
-
-  
-  
