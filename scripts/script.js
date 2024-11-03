@@ -20,14 +20,20 @@ console.log('isHost 초기값:', isHost); // 출력용 로그
 window.createRoom = function() { // 전역 함수로 설정
   isHost = true;
   localStorage.setItem('isHost', isHost); // isHost 값을 로컬 저장소에 저장
-  location.href = "../html/room-host.html"; // 방 만들기 후 페이지 이동
+  // 영상 녹화용 시간지연
+  setTimeout(() => {
+    location.href = "../html/room-host.html"; // 방 만들기 후 페이지 이동
+  }, 500); // 500ms = 0.5초
 };
 
 window.sendHost = function(name){
   if(isHost){
     console.log(name);
     // socket.send(JSON.stringify({ type: 'create', name: name }));
-    location.href = "../html/invite.html";
+    // 영상 녹화용 시간지연
+    setTimeout(() => {
+      location.href = "../html/invite.html"; // 방 만들기 후 페이지 이동
+    }, 500); // 500ms = 0.5초
   }
 }
 
@@ -130,6 +136,9 @@ window.closeModal = function() {
 
 // 초대창 -> 게임 시작 
 window.startGame = function() {
+  setTimeout(() => {
+    
+  }, 500); // 500ms = 0.5초
   closeModal();
   // location.href = '../html/keyword.html';
   const contentDiv = document.querySelector('.content');
@@ -138,14 +147,16 @@ window.startGame = function() {
   //제시어 공개
   const pTag = document.createElement('p');
   pTag.classList.add("pTag");
-  pTag.textContent = "주제는 \"컴퓨터공학과\"이고 제시어는 \"네트워크프로그래밍\" 입니다";
+  pTag.innerHTML = "당신은 시민입니다<br>주제는 \"컴퓨터공학과\"이고 제시어는 \"네트워크프로그래밍\" 입니다.";
+
+
   contentDiv.appendChild(pTag);
   console.log("게임이 시작됩니다.");
 
   //3초 후에 위치 이동
   setTimeout(() => {
     pTag.style.transition = "transform 1s ease"; // 이동 시 부드러운 효과
-    pTag.style.transform = "translate(-50%, -600%)";
+    pTag.style.transform = "translate(-50%, -270%)";
   }, 3000);
   //5초 후에 제시어 설명 시작
   setTimeout(() => {
