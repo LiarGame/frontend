@@ -6,7 +6,7 @@ localStorage.getItem('isHost') === 'true' ? isHost = true : isHost = false;
 let roomCode = 12345; // 임시 방 코드
 
 //const storedPlayerList = localStorage.getItem('playerList');
-window.storedPlayerList = ['User1', 'User2', 'User3', 'User4', 'User5'];
+window.storedPlayerList = ['조성현', '황혜령', '전우진', '임재형'];
 
 // 가져온 플레이어 리스트 출력
 if (storedPlayerList) {
@@ -80,6 +80,7 @@ window.renderPlayerList = function() {
           const playerElement = document.createElement('button');
           playerElement.className = 'overlap-group111 btn-16'; // 여러 클래스 이름 추가
           playerElement.textContent = player;
+          
           userListContainer.appendChild(playerElement);
       });
   } else {
@@ -137,7 +138,7 @@ window.startGame = function() {
   //제시어 공개
   const pTag = document.createElement('p');
   pTag.classList.add("pTag");
-  pTag.textContent = "주제는 \"동물\"이고 제시어는 \"하마\" 입니다";
+  pTag.textContent = "주제는 \"컴퓨터공학과\"이고 제시어는 \"네트워크프로그래밍\" 입니다";
   contentDiv.appendChild(pTag);
   console.log("게임이 시작됩니다.");
 
@@ -146,10 +147,10 @@ window.startGame = function() {
     pTag.style.transition = "transform 1s ease"; // 이동 시 부드러운 효과
     pTag.style.transform = "translate(-50%, -600%)";
   }, 3000);
-  //4초 후에 제시어 설명 시작
+  //5초 후에 제시어 설명 시작
   setTimeout(() => {
     explainKeyword();
-  }, 4000);
+  }, 5000);
 }
 
 //입력값 유무에 따라 버튼 활성화(수정해야댐)
@@ -226,6 +227,25 @@ window.sendMessage = function (){
     chatMessages.appendChild(message); // 메시지 영역에 추가
 
     chatInput.value = ""; // 입력 필드 초기화
+
+    // 라이어 지목창으로 이동
+    setTimeout(() => {
+      if (chatDiv) {
+        const findpTag = document.querySelector('.pTag');
+        findpTag.innerHTML = '<b style="color: red;">라이어로 의심되는 사람을 지목해 주세요!</b>';
+        chatDiv.style.display = "none"; 
+      }
+    }, 4000);
+
+    // 버튼 클릭시 페이지 전환 추가
+    const buttonElements = document.querySelectorAll('.overlap-group111.btn-16');
+    buttonElements.forEach((buttonElement) => {
+        buttonElement.addEventListener('click', () => {
+            // 화면 전환: 원하는 URL로 변경하세요
+            window.location.href = '../html/guess.html'; // 예: 'page2.html'
+        });
+    });
+
   }
 }
 
@@ -234,4 +254,5 @@ window.sendMessage = function (){
 window.sendFinalAnswer = function() {
   const inputValue = document.querySelector('input[type="text"]').value; // 입력 필드의 값을 가져옴
   console.log(inputValue); // 콘솔에 출력
+  location.href = "../html/liar-win.html"; // 방 만들기 후 페이지 이동
 };
