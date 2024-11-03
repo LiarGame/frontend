@@ -6,7 +6,7 @@ localStorage.getItem('isHost') === 'true' ? isHost = true : isHost = false;
 let roomCode = 12345; // 임시 방 코드
 
 //const storedPlayerList = localStorage.getItem('playerList');
-window.storedPlayerList = ['User1', 'User2', 'User3', 'User4', 'User5'];
+window.storedPlayerList = ['조성현', '황혜령', '전우진', '임재형'];
 
 // 가져온 플레이어 리스트 출력
 if (storedPlayerList) {
@@ -226,6 +226,25 @@ window.sendMessage = function (){
     chatMessages.appendChild(message); // 메시지 영역에 추가
 
     chatInput.value = ""; // 입력 필드 초기화
+
+    // 라이어 지목창으로 이동
+    setTimeout(() => {
+      if (chatDiv) {
+        const findpTag = document.querySelector('.pTag');
+        findpTag.innerHTML = "<strong>라이어로 의심되는 사람을 지목해 주세요!</strong>";
+        chatDiv.style.display = "none"; 
+      }
+    }, 4000);
+
+    // 버튼 클릭시 페이지 전환 추가
+    const buttonElements = document.querySelectorAll('.overlap-group111.btn-16');
+    buttonElements.forEach((buttonElement) => {
+        buttonElement.addEventListener('click', () => {
+            // 화면 전환: 원하는 URL로 변경하세요
+            window.location.href = '../html/guess.html'; // 예: 'page2.html'
+        });
+    });
+
   }
 }
 

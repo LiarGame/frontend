@@ -173,7 +173,7 @@
 
 .screen .overlap-group111 {
     position: relative;
-    width: 123px; /* 각 요소가 동일한 비율로 가로 공간을 차지 */
+    width: 180px; /* 각 요소가 동일한 비율로 가로 공간을 차지 */
     height: 50px; /* 높이 설정 */
     text-align: center; /* 텍스트 중앙 정렬 */
     font-family: "Inter-Thin", Helvetica;
