@@ -80,6 +80,7 @@ window.renderPlayerList = function() {
           const playerElement = document.createElement('button');
           playerElement.className = 'overlap-group111 btn-16'; // 여러 클래스 이름 추가
           playerElement.textContent = player;
+          
           userListContainer.appendChild(playerElement);
       });
   } else {
@@ -137,7 +138,7 @@ window.startGame = function() {
   //제시어 공개
   const pTag = document.createElement('p');
   pTag.classList.add("pTag");
-  pTag.textContent = "주제는 \"동물\"이고 제시어는 \"하마\" 입니다";
+  pTag.textContent = "주제는 \"컴퓨터공학과\"이고 제시어는 \"네트워크프로그래밍\" 입니다";
   contentDiv.appendChild(pTag);
   console.log("게임이 시작됩니다.");
 
@@ -146,10 +147,10 @@ window.startGame = function() {
     pTag.style.transition = "transform 1s ease"; // 이동 시 부드러운 효과
     pTag.style.transform = "translate(-50%, -600%)";
   }, 3000);
-  //4초 후에 제시어 설명 시작
+  //5초 후에 제시어 설명 시작
   setTimeout(() => {
     explainKeyword();
-  }, 4000);
+  }, 5000);
 }
 
 //입력값 유무에 따라 버튼 활성화(수정해야댐)
@@ -231,7 +232,7 @@ window.sendMessage = function (){
     setTimeout(() => {
       if (chatDiv) {
         const findpTag = document.querySelector('.pTag');
-        findpTag.innerHTML = "<strong>라이어로 의심되는 사람을 지목해 주세요!</strong>";
+        findpTag.innerHTML = '<b style="color: red;">라이어로 의심되는 사람을 지목해 주세요!</b>';
         chatDiv.style.display = "none"; 
       }
     }, 4000);
@@ -253,4 +254,5 @@ window.sendMessage = function (){
 window.sendFinalAnswer = function() {
   const inputValue = document.querySelector('input[type="text"]').value; // 입력 필드의 값을 가져옴
   console.log(inputValue); // 콘솔에 출력
+  location.href = "../html/liar-win.html"; // 방 만들기 후 페이지 이동
 };
