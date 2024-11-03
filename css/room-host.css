@@ -8,7 +8,7 @@
 .screen .div {
   background-color: #ffffff;
   width: 1512px;
-  height: 982px;
+  height: 100%;
   position: relative;
 }
 .screen .image {
