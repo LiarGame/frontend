@@ -1,6 +1,4 @@
-
-
-const worker = new SharedWorker('worker.js');
+const worker = new SharedWorker("worker.js");
 worker.port.start();
 
 window.isHost = false; // 방장 여부
@@ -15,6 +13,11 @@ document.addEventListener("DOMContentLoaded", () => {
   if (isHost && currentPath.includes("html/invite.html")) {
     renderPlayerList();
   }
+  if (!isHost && currentPath.includes("html/invite.html")) {
+    let player = [];
+    player = JSON.parse(localStorage.getItem("playerList"));
+    renderPlayerList(player);
+  }
 });
 worker.port.onmessage = (event) => {
   // event.data를 JSON으로 파싱
@@ -23,27 +26,34 @@ worker.port.onmessage = (event) => {
   localStorage.setItem("playerList", JSON.stringify(message.playerName));
 
   switch (message.type) {
-      case "CREATE_ROOM_RESPONSE":
-          localStorage.setItem("roomCode", message.roomCode)
-          
-          break;
+    case "CREATE_ROOM_RESPONSE":
+      localStorage.setItem("roomCode", message.roomCode);
 
-      case "JOIN_RESPONSE":
-          const playerList =  message.playerList;
-          console.log(message.playerList);
-          renderPlayerList(playerList);
-          console.log("Updated player list:", playerList.join(", "));
-          break;
+      break;
 
-      case "ROLE_ASSIGN_RESPONSE":
-          handleRoleAssignResponse(message);
-          break;
+    case "JOIN_RESPONSE":
+      if (window.location.pathname.includes("html/invite.html")) {
+        const playerList = message.playerList;
+        console.log(message.playerList);
+        renderPlayerList(playerList);
+        console.log("Updated player list:", playerList.join(", "));
+      }
+      if (window.location.pathname.includes("html/room-guest.html")) {
+        const playerList = message.playerList; // 배열이어야 함
+        console.log(message.playerList);
+        const playerListString = JSON.stringify(playerList); // 배열을 JSON 문자열로 변환
+        localStorage.setItem("playerList", playerListString); // 변환된 문자열 저장
+      }
+      break;
 
-      default:
-          console.warn("Unhandled message type:", message.type);
+    case "ROLE_ASSIGN_RESPONSE":
+      handleRoleAssignResponse(message);
+      break;
+
+    default:
+      console.warn("Unhandled message type:", message.type);
   }
 };
-
 
 // index.js로 분리예정
 window.createRoom = function () {
@@ -53,7 +63,7 @@ window.createRoom = function () {
   // 영상 녹화용 시간지연
   setTimeout(() => {
     location.href = "../html/room-host.html"; // 방 만들기 후 페이지 이동
-  }, 500); // 500ms = 0.5초
+  }, 5000); // 500ms = 0.5초
 };
 
 window.sendHost = function (name) {
@@ -66,7 +76,7 @@ window.sendHost = function (name) {
     // 영상 녹화용 시간지연
     setTimeout(() => {
       location.href = "../html/invite.html"; // 방 만들기 후 페이지 이동
-    }, 50000); // 500ms = 0.5초
+    }, 5000); // 500ms = 0.5초
   }
 };
 
@@ -80,7 +90,9 @@ window.sendGuest = function (name, roomCode) {
       roomCode: roomCode, // 방 코드
     });
     worker.port.postMessage(request);
-    location.href = "../html/invite.html";
+    setTimeout(() => {
+      location.href = "../html/invite.html"; // 방 만들기 후 페이지 이동
+    }, 5000); // 500ms = 0.5초
   }
 };
 
@@ -101,12 +113,10 @@ window.cancelRoom = function () {
 };
 
 window.renderPlayerList = function (playerList) {
-  
   const userListContainer = document.getElementById("userList");
-  if(userListContainer) {
-  userListContainer.innerHTML = ""; // 기존 내용 초기화
+  if (userListContainer) {
+    userListContainer.innerHTML = ""; // 기존 내용 초기화
   }
-  
 
   const roomCodeElement = document.getElementById("roomCode");
   const roomCode = localStorage.getItem("roomCode");

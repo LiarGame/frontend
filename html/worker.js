@@ -1,6 +1,6 @@
 let socket = null; // WebSocket 인스턴스
 let connections = []; // 연결된 포트(페이지) 리스트
-
+let playerList = [];
 // SharedWorker에서 연결 관리
 onconnect = (e) => {
     const port = e.ports[0];
