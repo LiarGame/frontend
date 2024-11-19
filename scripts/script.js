@@ -47,7 +47,10 @@ worker.port.onmessage = (event) => {
       break;
 
     case "ROLE_ASSIGN_RESPONSE":
-      handleRoleAssignResponse(message);
+      localStorage.setItem("liar", message.liar);
+      localStorage.setItem("topic", message.topic);
+      localStorage.setItem("word", message.word);
+
       break;
 
     default:
@@ -63,7 +66,7 @@ window.createRoom = function () {
   // 영상 녹화용 시간지연
   setTimeout(() => {
     location.href = "../html/room-host.html"; // 방 만들기 후 페이지 이동
-  }, 5000); // 500ms = 0.5초
+  }, 500); // 500ms = 0.5초
 };
 
 window.sendHost = function (name) {
@@ -76,7 +79,7 @@ window.sendHost = function (name) {
     // 영상 녹화용 시간지연
     setTimeout(() => {
       location.href = "../html/invite.html"; // 방 만들기 후 페이지 이동
-    }, 5000); // 500ms = 0.5초
+    }, 500); // 500ms = 0.5초
   }
 };
 
@@ -92,7 +95,7 @@ window.sendGuest = function (name, roomCode) {
     worker.port.postMessage(request);
     setTimeout(() => {
       location.href = "../html/invite.html"; // 방 만들기 후 페이지 이동
-    }, 5000); // 500ms = 0.5초
+    }, 500); // 500ms = 0.5초
   }
 };
 
@@ -176,22 +179,62 @@ window.closeModal = function () {
   }
 };
 
-// 초대창 -> 게임 시작
-window.startGame = function () {
-  setTimeout(() => {}, 500); // 500ms = 0.5초
-  closeModal();
-  // location.href = '../html/keyword.html';
+window.sendStartGameRequest = function () {
+  const playername = localStorage.getItem("playerName");
+  console.log("player name from sendStartGameRequest: " + playername);
+  const roomcode = localStorage.getItem("roomCode");
+
+  const request = JSON.stringify({
+    type: "START_GAME_REQUEST", // 요청 타입
+    playerName: playername, // 플레이어 이름
+    roomCode: roomcode, // 방 코드
+  });
+  worker.port.postMessage(request);
+};
+
+window.releaseRoleAndKeyword = function () {
   const contentDiv = document.querySelector(".content");
   contentDiv.innerHTML = "";
 
-  //제시어 공개
   const pTag = document.createElement("p");
   pTag.classList.add("pTag");
-  pTag.innerHTML =
-    '당신은 시민입니다<br>주제는 "컴퓨터공학과"이고 제시어는 "네트워크프로그래밍" 입니다.';
 
+  const playername = localStorage.getItem("playerName");
+  console.log("player name: " + playername);
+  const role_liar = localStorage.getItem("liar")
+  console.log("who is liar: " + role_liar);
+  const topic = localStorage.getItem("topic");
+  console.log(topic);
+  const keyword = localStorage.getItem("word");
+  console.log(keyword);
+
+  let topic_kor
+  switch (topic) {
+    case "BUILDING":
+      topic_kor = "건국대학교 건물";
+      break;
+    case "LANDMARK":
+      topic_kor = "건국대학교 명소";
+      break;
+    case "ANIMAL":
+      topic_kor = "건국대학교 동물";
+      break;
+    default:
+      console.log("ROLE_ASSIGN_RESPONSE error");
+  }
+
+  if(role_liar === playername) {
+    pTag.innerHTML =
+        '당신은 라이어입니다<br>' +
+        '주제는 ' + topic_kor + '이고, ' +
+        '제시어는 ' + keyword + '입니다.';
+  } else {
+    pTag.innerHTML =
+        '당신은 시민입니다<br>' +
+        '주제는 ' + topic_kor + '이고, ' +
+        '제시어는 ' + keyword + '입니다.';
+  }
   contentDiv.appendChild(pTag);
-  console.log("게임이 시작됩니다.");
 
   //3초 후에 위치 이동
   setTimeout(() => {
@@ -202,6 +245,20 @@ window.startGame = function () {
   setTimeout(() => {
     explainKeyword();
   }, 5000);
+};
+
+// 초대창 -> 게임 시작
+window.startGame = function () {
+  setTimeout(() => {}, 500); // 500ms = 0.5초
+
+  sendStartGameRequest();
+
+  closeModal();
+
+  //제시어 공개
+  releaseRoleAndKeyword();
+
+  console.log("게임이 시작됩니다.");
 };
 
 //입력값 유무에 따라 버튼 활성화(수정해야댐)

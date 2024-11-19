@@ -75,6 +75,24 @@ onconnect = (e) => {
                 port.postMessage({ error: "WebSocket not connected" });
             }
         }
+
+        if (type === "START_GAME_REQUEST") {
+            const { roomCode } = JSON.parse(event.data);
+            console.log("Processing START_GAME_REQUEST:", playerName, roomCode);
+
+            if (socket && socket.readyState === WebSocket.OPEN) {
+                const request = JSON.stringify({
+                    type: "START_GAME_REQUEST",
+                    playerName: playerName,
+                    roomCode: roomCode,
+                });
+                socket.send(request);
+                console.log("START_GAME_REQUEST sent to WebSocket server:", request);
+            } else {
+                console.error("WebSocket is not connected.");
+                port.postMessage({ error: "WebSocket not connected" });
+            }
+        }
     };
 
     port.onclose = () => {
