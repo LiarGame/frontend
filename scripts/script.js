@@ -193,6 +193,16 @@ window.sendStartGameRequest = function () {
 };
 
 window.releaseRoleAndKeyword = function () {
+  let player = localStorage.getItem("playerName")
+  let roomNumber = localStorage.getItem("roomCode")
+  const request = JSON.stringify({
+    type: "START_GAME_REQUEST", // 요청 타입
+    playerName: player, // 플레이어 이름
+    roomCode: roomNumber, // 방 코드
+  });
+  console.log(request);
+  worker.port.postMessage(request);
+  
   const contentDiv = document.querySelector(".content");
   contentDiv.innerHTML = "";
 

@@ -1,6 +1,6 @@
 let socket = null; // WebSocket 인스턴스
 let connections = []; // 연결된 포트(페이지) 리스트
-let playerList = [];
+let playerList = []; // 플레이어 리스트
 // SharedWorker에서 연결 관리
 onconnect = (e) => {
     const port = e.ports[0];
@@ -80,6 +80,7 @@ onconnect = (e) => {
             const { roomCode } = JSON.parse(event.data);
             console.log("Processing START_GAME_REQUEST:", playerName, roomCode);
 
+            const { playerName, roomCode } = JSON.parse(event.data);
             if (socket && socket.readyState === WebSocket.OPEN) {
                 const request = JSON.stringify({
                     type: "START_GAME_REQUEST",
@@ -88,6 +89,10 @@ onconnect = (e) => {
                 });
                 socket.send(request);
                 console.log("START_GAME_REQUEST sent to WebSocket server:", request);
+                    roomCode : roomCode
+                });
+                socket.send(request);
+                console.log("CREATE_ROOM_REQUEST sent to WebSocket server:", request);
             } else {
                 console.error("WebSocket is not connected.");
                 port.postMessage({ error: "WebSocket not connected" });
