@@ -47,7 +47,7 @@ worker.port.onmessage = (event) => {
       break;
 
     case "ROLE_ASSIGN_RESPONSE":
-      handleRoleAssignResponse(message);
+      // 서버 응답처리
       break;
 
     default:
@@ -63,7 +63,7 @@ window.createRoom = function () {
   // 영상 녹화용 시간지연
   setTimeout(() => {
     location.href = "../html/room-host.html"; // 방 만들기 후 페이지 이동
-  }, 5000); // 500ms = 0.5초
+  }, 500); // 500ms = 0.5초
 };
 
 window.sendHost = function (name) {
@@ -76,7 +76,7 @@ window.sendHost = function (name) {
     // 영상 녹화용 시간지연
     setTimeout(() => {
       location.href = "../html/invite.html"; // 방 만들기 후 페이지 이동
-    }, 5000); // 500ms = 0.5초
+    }, 500); // 500ms = 0.5초
   }
 };
 
@@ -92,7 +92,7 @@ window.sendGuest = function (name, roomCode) {
     worker.port.postMessage(request);
     setTimeout(() => {
       location.href = "../html/invite.html"; // 방 만들기 후 페이지 이동
-    }, 5000); // 500ms = 0.5초
+    }, 500); // 500ms = 0.5초
   }
 };
 
@@ -178,6 +178,15 @@ window.closeModal = function () {
 
 // 초대창 -> 게임 시작
 window.startGame = function () {
+  let player = localStorage.getItem("playerName")
+  let roomNumber = localStorage.getItem("roomCode")
+  const request = JSON.stringify({
+    type: "START_GAME_REQUEST", // 요청 타입
+    playerName: player, // 플레이어 이름
+    roomCode: roomNumber, // 방 코드
+  });
+  console.log(request);
+  worker.port.postMessage(request);
   setTimeout(() => {}, 500); // 500ms = 0.5초
   closeModal();
   // location.href = '../html/keyword.html';
