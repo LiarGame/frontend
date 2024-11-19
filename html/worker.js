@@ -77,8 +77,9 @@ onconnect = (e) => {
         }
 
         if (type === "START_GAME_REQUEST") {
-            console.log("Processing START_GAME_REQUEST:", playerName, roomCode);
             const { playerName, roomCode } = JSON.parse(event.data);
+            console.log("Processing START_GAME_REQUEST:", playerName, roomCode);
+
             if (socket && socket.readyState === WebSocket.OPEN) {
                 const request = JSON.stringify({
                     type: "START_GAME_REQUEST",
