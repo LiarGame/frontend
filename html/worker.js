@@ -93,6 +93,24 @@ onconnect = (e) => {
                 port.postMessage({ error: "WebSocket not connected" });
             }
         }
+        if (type === "SPEAK_REQUEST") {
+            const { playerName, message, roomCode } = JSON.parse(event.data);
+            console.log("Processing SPEAK_REQUEST:", playerName, message, roomCode);
+
+            if (socket && socket.readyState === WebSocket.OPEN) {
+                const request = JSON.stringify({
+                    type: "SPEAK_REQUEST",
+                    playerName: playerName,
+                    message: message,
+                    roomCode: roomCode,
+                });
+                socket.send(request);
+                console.log("SPEAK_REQUEST sent to WebSocket server:", request);
+            } else {
+                console.error("WebSocket is not connected.");
+                port.postMessage({ error: "WebSocket not connected" });
+            }
+        }
     };
 
     port.onclose = () => {

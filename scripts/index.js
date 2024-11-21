@@ -14,7 +14,6 @@ window.createRoom = function () {
 };
 
 
-
 window.joinRoom = function () {
   // 전역 함수로 설정
   isHost = false; // 참가하기 클릭 시 isHost는 false

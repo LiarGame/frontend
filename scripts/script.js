@@ -19,6 +19,7 @@ document.addEventListener("DOMContentLoaded", () => {
     renderPlayerList(player);
   }
 });
+let lastMessage = null; //같은 SPEAK_RESPONSE가 중복 출력되지 않게 하기 위함
 worker.port.onmessage = (event) => {
   // event.data를 JSON으로 파싱
   const message = event.data;
@@ -27,8 +28,8 @@ worker.port.onmessage = (event) => {
 
   switch (message.type) {
     case "CREATE_ROOM_RESPONSE":
+      localStorage.setItem("myPlayer", message.playerName);
       localStorage.setItem("roomCode", message.roomCode);
-
       break;
 
     case "JOIN_RESPONSE":
@@ -50,8 +51,23 @@ worker.port.onmessage = (event) => {
       localStorage.setItem("liar", message.liar);
       localStorage.setItem("topic", message.topic);
       localStorage.setItem("word", message.word);
-
       break;
+
+    case "SPEAK_RESPONSE":
+      if (lastMessage === message.message) {
+        //아무것도 안함
+      }
+      else {
+        lastMessage = message.message;
+        localStorage.setItem("playerName", message.playerName);
+        localStorage.setItem("message", message.message);
+        localStorage.setItem("nextPlayer", message.nextPlayer);
+        receiveMessage();
+      }
+      break;
+
+    case "ERROR":
+      console.log(message.message);
 
     default:
       console.warn("Unhandled message type:", message.type);
@@ -129,7 +145,7 @@ window.renderPlayerList = function (playerList) {
   if (playerList) {
     playerList.forEach((player) => {
       const playerElement = document.createElement("button");
-      playerElement.className = "overlap-group111 btn-16"; // 여러 클래스 이름 추가
+      playerElement.className = "overlap-group111 voteBtn not-selected"; // 여러 클래스 이름 추가
       playerElement.textContent = player;
 
       userListContainer.appendChild(playerElement);
@@ -253,7 +269,7 @@ window.releaseRoleAndKeyword = function () {
   }, 3000);
   //5초 후에 제시어 설명 시작
   setTimeout(() => {
-    explainKeyword();
+    showChatDisplay();
   }, 5000);
 };
 
@@ -326,7 +342,7 @@ window.checkChatInput = function () {
   chatInput.addEventListener("input", checkChatInput);
 };
 
-window.explainKeyword = function () {
+window.showChatDisplay = function () {
   const contentDiv = document.querySelector(".content");
   const chatDiv = document.querySelector("#chatDiv");
   contentDiv.appendChild(chatDiv);
@@ -337,41 +353,134 @@ window.explainKeyword = function () {
 
 window.sendMessage = function () {
   const chatInput = document.getElementById("chatInput");
-  const chatMessages = document.getElementById("chatMessages");
+
+  const player = localStorage.getItem("playerName");
+  const roomCode = localStorage.getItem("roomCode");
+  const message = chatInput.value;
 
   if (chatInput.value.trim() !== "") {
-    // 새 메시지 추가
-    const message = document.createElement("p");
-    message.classList.add("myMsg");
-    message.innerHTML = `${chatInput.value}`;
-    // <span className="chat-sender">나</span>
-
-    chatMessages.appendChild(message); // 메시지 영역에 추가
-
-    chatInput.value = ""; // 입력 필드 초기화
-
-    // 라이어 지목창으로 이동
-    setTimeout(() => {
-      if (chatDiv) {
-        const findpTag = document.querySelector(".pTag");
-        findpTag.innerHTML =
-          '<b style="color: red;">라이어로 의심되는 사람을 지목해 주세요!</b>';
-        chatDiv.style.display = "none";
-      }
-    }, 4000);
-
-    // 버튼 클릭시 페이지 전환 추가
-    const buttonElements = document.querySelectorAll(
-      ".overlap-group111.btn-16"
-    );
-    buttonElements.forEach((buttonElement) => {
-      buttonElement.addEventListener("click", () => {
-        // 화면 전환: 원하는 URL로 변경하세요
-        window.location.href = "../html/guess.html"; // 예: 'page2.html'
-      });
+    //메시지 보내기 요청
+    const request = JSON.stringify({
+      type: "SPEAK_REQUEST", // 요청 타입
+      playerName: player, // 플레이어 이름
+      message: message,
+      roomCode: roomCode, // 방 코드
     });
+    console.log(request);
+    worker.port.postMessage(request);
+    chatInput.value = '';
+  } else {
+    console.log("메시지를 입력하세요");
   }
 };
+
+window.receiveMessage = function () {
+  const myPlayer = localStorage.getItem("myPlayer");
+  const player = localStorage.getItem("playerName");
+  const receivedMessage = localStorage.getItem("message");
+
+  const chatMessages = document.getElementById("chatMessages");
+  if (myPlayer === player) {
+    const myPTag = document.createElement("p");
+    myPTag.classList.add("myMsg");
+    myPTag.innerHTML = `${player} : ${receivedMessage}`;
+    chatMessages.appendChild(myPTag);
+  }
+  else {
+    const otherPTag = document.createElement("p");
+    otherPTag.classList.add("otherMsg");
+    otherPTag.innerHTML = `${player} : ${receivedMessage}`;
+    chatMessages.appendChild(otherPTag);
+  }
+}
+
+    // // 새 메시지 추가
+    // const message = document.createElement("p");
+    // message.classList.add("myMsg");
+    // message.innerHTML = `${chatInput.value}`;
+    // // <span className="chat-sender">나</span>
+    //
+    //
+    // chatMessages.appendChild(message); // 메시지 영역에 추가
+    //
+    // chatInput.value = ""; // 입력 필드 초기화
+    //
+    // // 라이어 지목창으로 이동
+    // setTimeout(() => {
+    //   if (chatDiv) {
+    //     const findpTag = document.querySelector(".pTag");
+    //     findpTag.innerHTML =
+    //       '<b style="color: red;">라이어로 의심되는 사람을 지목해 주세요!</b>';
+    //     chatDiv.style.display = "none";
+    //   }
+    // }, 4000);
+    //
+    // // 버튼 클릭시 페이지 전환 추가
+    // const buttonElements = document.querySelectorAll(
+    //   ".overlap-group111.btn-16"
+    // );
+    // buttonElements.forEach((buttonElement) => {
+    //   buttonElement.addEventListener("click", () => {
+    //     // 화면 전환: 원하는 URL로 변경하세요
+    //     window.location.href = "../html/guess.html"; // 예: 'page2.html'
+    //   });
+    // });
+
+window.DiscussKeyword = function () {
+  //발언 순서 관리
+  sendMessage();
+
+  setTimeout(() => {
+    voteLiar();
+  },2000);
+}
+
+window.voteLiar = function () {
+  const contentDiv = document.getElementById("contentInvite");
+  contentDiv.replaceChildren();
+
+  const voteDiv = document.createElement("div");
+  voteDiv.id = "voteDiv";
+  voteDiv.classList.add("voteDivStyle");
+  voteDiv.innerHTML = "라이어를 투표해주세요!";
+
+  const secondPTag = document.createElement("p");
+  secondPTag.classList.add("secondPTagStyle");
+
+  contentDiv.appendChild(voteDiv);
+  contentDiv.appendChild(secondPTag);
+
+  // let second = 15;
+  // const countdown = setInterval(() => {
+  //   secondPTag.textContent = second; // 남은 시간 표시
+  //   second--; // 1초 감소
+  //
+  //   if (second < 0) {
+  //     clearInterval(countdown); // 타이머 종료
+  //     //라이어로 지목된 사람은 제시어 맞추기
+  //     location.href = "../html/guess.html";
+  //   }
+  // }, 1000);
+
+  const voteBtns = document.querySelectorAll(".voteBtn");
+  voteBtns.forEach((voteBtn) => {
+    voteBtn.addEventListener("click", () => {
+      voteBtns.forEach((voteBtn) => {
+        voteBtn.classList.remove("selected");
+      });
+      voteBtn.classList.remove("not-selected");
+      voteBtn.classList.add("selected");
+      const votedPlayer = voteBtn.textContent;
+      sendVote(votedPlayer);
+    });
+  });
+}
+
+window.sendVote = function (votedPlayer) {
+  console.log(votedPlayer + "을(를) 라이어로 지목했습니다.");
+  //투표 요청
+};
+
 
 // 최종 답 보내기
 window.sendFinalAnswer = function () {
