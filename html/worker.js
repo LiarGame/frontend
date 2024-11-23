@@ -93,6 +93,7 @@ onconnect = (e) => {
                 port.postMessage({ error: "WebSocket not connected" });
             }
         }
+
         if (type === "SPEAK_REQUEST") {
             const { playerName, message, roomCode } = JSON.parse(event.data);
             console.log("Processing SPEAK_REQUEST:", playerName, message, roomCode);
