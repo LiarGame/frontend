@@ -70,7 +70,18 @@ worker.port.onmessage = (event) => {
         receiveMessage();
       }
       break;
-
+    
+    // 게임 결과화면
+    case "GAME_RESULT":
+      sessionStorage.setItem("citizen", message.citizen);
+      sessionStoragesetItem("liarName", message.liarName);
+      if(message.winner == "Citizen"){
+        if(window.location.pathname.includes("html/invite.html")){
+          location.href = "html/citizen-win.html";
+        } else{
+          location.href = "html/liar-win.html";
+        }
+      }
     case "ERROR":
       console.log(message.message);
 
