@@ -4,6 +4,7 @@ worker.port.start();
 window.isHost = false; // 방장 여부
 sessionStorage.getItem("isHost") === "true" ? (isHost = true) : (isHost = false);
 let roomCode = 12345; // 임시 방 코드
+window.isFinal = false; // 최종 답 제출 여부
 
 document.addEventListener("DOMContentLoaded", () => {
   // 페이지 경로 확인
@@ -14,6 +15,31 @@ document.addEventListener("DOMContentLoaded", () => {
     let player = [];
     player = JSON.parse(sessionStorage.getItem("playerList"));
     renderPlayerList(player);
+  }
+
+  if(isFinal == true){
+    const citizenData = sessionStorage.getItem("citizen"); // 시민팀
+    const liarName = sessionStorage.getItem("liarName"); // 라이어 
+    const keyword = sessionStorage.getItem("keyword"); // 제시어
+
+    const citizenList = JSON.parse(citizenData); // 저장된 시민 데이터가 JSON 배열이라고 가정
+    const citizenContainer = document.getElementById("citizen-list");
+
+    citizenList.forEach((name) => {
+      const citizenDiv = document.createElement("div");
+      citizenDiv.classList.add("player");
+      citizenDiv.textContent = name;
+      citizenContainer.appendChild(citizenDiv);
+    });
+
+    const liarContainer = document.getElementById("liar-name");
+    const liarDiv = document.createElement("div");
+    liarDiv.classList.add("player-liar");
+    liarDiv.textContent = liarName;
+    liarContainer.appendChild(liarDiv);
+
+    const keywordElement = document.getElementById("keyword");
+    keywordElement.textContent = `제시어: ${keyword}`;
   }
 });
 let lastMessage = null; //같은 SPEAK_RESPONSE가 중복 출력되지 않게 하기 위함
@@ -75,6 +101,7 @@ worker.port.onmessage = (event) => {
     case "GAME_RESULT":
       sessionStorage.setItem("citizen", message.citizen);
       sessionStoragesetItem("liarName", message.liarName);
+      isFinal = true;
       if(message.winner == "Citizen"){
         if(window.location.pathname.includes("html/invite.html")){
           location.href = "html/citizen-win.html";
