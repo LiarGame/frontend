@@ -20,15 +20,18 @@ let lastMessage = null; //같은 SPEAK_RESPONSE가 중복 출력되지 않게 �
 worker.port.onmessage = (event) => {
   // event.data를 JSON으로 파싱
   const message = event.data;
-  console.log(message);
-  sessionStorage.setItem("playerList", JSON.stringify(message.playerName));
-  console.log(sessionStorage.getItem("playerList"));
+  if(message === "Worker connected"){
+    console.log("Storage 초기화")
+    sessionStorage.clear();
+  }
+  
+  
 
   switch (message.type) {
     case "CREATE_ROOM_RESPONSE":
       sessionStorage.setItem("myPlayer", message.playerName);
       sessionStorage.setItem("roomCode", message.roomCode);
-      renderPlayerList(message.playerName);
+      
       break;
 
     case "JOIN_RESPONSE":
@@ -50,6 +53,9 @@ worker.port.onmessage = (event) => {
       sessionStorage.setItem("liar", message.liar);
       sessionStorage.setItem("topic", message.topic);
       sessionStorage.setItem("word", message.word);
+      if (window.location.pathname.includes("html/invite.html")){
+        window.startGame();
+      }
       break;
 
     case "SPEAK_RESPONSE":
@@ -69,13 +75,13 @@ worker.port.onmessage = (event) => {
       console.log(message.message);
 
     default:
-      console.warn("Unhandled message type:", message.type);
+      console.log("Unhandled message type:");
   }
 };
 
 window.sendHost = function (name) {
   if (isHost) {
-    // sessionStorage.setItem("playerName", name);
+    sessionStorage.setItem("playerName", name);
     console.log(name);
     worker.port.postMessage(
       JSON.stringify({ type: "CREATE_ROOM_REQUEST", playerName: name })
@@ -89,7 +95,7 @@ window.sendHost = function (name) {
 
 window.sendGuest = function (name, roomCode) {
   if (!isHost) {
-    // sessionStorage.setItem("playerName", name); // 플레이어 이름을 로컬 저장소에 저장
+    sessionStorage.setItem("playerName", name); // 플레이어 이름을 로컬 저장소에 저장
     sessionStorage.setItem("roomCode", roomCode); // 방 코드를 로컬 저장소에 저장
     const request = JSON.stringify({
       type: "JOIN_REQUEST", // 요청 타입
@@ -145,10 +151,7 @@ window.renderPlayerList = function (playerList) {
 };
 
 window.openModal = function () {
-  if (!isHost) {
-    console.log("방장이 아니라 게임을 시작할 수 없습니다.");
-    return;
-  }
+  if(!isHost) return;
   document.getElementById("modalOverlay").style.display = "flex";
 
   // bottom-btn과 bottom-btn2 클래스를 가진 요소를 숨기기
@@ -200,13 +203,13 @@ window.sendStartGameRequest = function () {
 window.releaseRoleAndKeyword = function () {
   let player = sessionStorage.getItem("playerName")
   let roomNumber = sessionStorage.getItem("roomCode")
-  const request = JSON.stringify({
-    type: "START_GAME_REQUEST", // 요청 타입
-    playerName: player, // 플레이어 이름
-    roomCode: roomNumber, // 방 코드
-  });
-  console.log(request);
-  worker.port.postMessage(request);
+  // const request = JSON.stringify({
+  //   type: "START_GAME_REQUEST", // 요청 타입
+  //   playerName: player, // 플레이어 이름
+  //   roomCode: roomNumber, // 방 코드
+  // });
+  // console.log(request);
+  // worker.port.postMessage(request);
   
   const contentDiv = document.querySelector(".content");
   contentDiv.innerHTML = "";
@@ -240,9 +243,7 @@ window.releaseRoleAndKeyword = function () {
 
   if(role_liar === playername) {
     pTag.innerHTML =
-        '당신은 라이어입니다<br>' +
-        '주제는 ' + topic_kor + '이고, ' +
-        '제시어는 ' + keyword + '입니다.';
+        '당신은 라이어입니다<br>';
   } else {
     pTag.innerHTML =
         '당신은 시민입니다<br>' +
@@ -259,18 +260,17 @@ window.releaseRoleAndKeyword = function () {
   //5초 후에 제시어 설명 시작
   setTimeout(() => {
     showChatDisplay();
-  }, 5000);
+  }, 8000);
 };
 
 // 초대창 -> 게임 시작
 window.startGame = function () {
   if(sessionStorage.getItem("playerList"))
   setTimeout(() => {}, 500); // 500ms = 0.5초
-
-  sendStartGameRequest();
-
+  if(isHost){
+    sendStartGameRequest();
+  }
   closeModal();
-
   //제시어 공개
   releaseRoleAndKeyword();
 

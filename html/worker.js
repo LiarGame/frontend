@@ -10,9 +10,8 @@ onconnect = (e) => {
     // WebSocket 연결
     if (!socket) {
         socket = new WebSocket('ws://localhost:8080'); // WebSocket 서버 주소
-
         socket.onopen = () => {
-            console.log('WebSocket connected');
+            
             // WebSocket이 연결되면 SharedWorker에 연결 상태를 전달
             connections.forEach(conn => conn.postMessage("Worker connected"));
         };
