@@ -111,6 +111,63 @@ onconnect = (e) => {
                 port.postMessage({ error: "WebSocket not connected" });
             }
         }
+
+        if (type === "DISCUSS_MESSAGE_REQUEST") {
+            const { playerName, message, roomCode } = JSON.parse(event.data);
+            console.log("Processing DISCUSS_MESSAGE_REQUEST:", playerName, message, roomCode);
+
+            if (socket && socket.readyState === WebSocket.OPEN) {
+                const request = JSON.stringify({
+                    type: "DISCUSS_MESSAGE_REQUEST",
+                    playerName: playerName,
+                    message: message,
+                    roomCode: roomCode,
+                });
+                socket.send(request);
+                console.log("DISCUSS_MESSAGE_REQUEST sent to WebSocket server:", request);
+            } else {
+                console.error("WebSocket is not connected.");
+                port.postMessage({ error: "WebSocket not connected" });
+            }
+        }
+
+        if (type === "VOTE_REQUEST") {
+            const { voter, suspect, roomCode } = JSON.parse(event.data);
+
+            if (socket && socket.readyState === WebSocket.OPEN) {
+                const request = JSON.stringify({
+                    type: "VOTE_REQUEST",
+                    voter: voter,
+                    suspect: suspect,
+                    roomCode: roomCode,
+                });
+                socket.send(request);
+                console.log("VOTE_REQUEST sent to WebSocket server:", request);
+            } else {
+                console.error("WebSocket is not connected.");
+                port.postMessage({ error: "WebSocket not connected" });
+            }
+        }
+
+        if (type === "GUESS_WORD_REQUEST") {
+            const { playerName, message, roomCode, guessWord } = JSON.parse(event.data);
+
+            if (socket && socket.readyState === WebSocket.OPEN) {
+                const request = JSON.stringify({
+                    type: "GUESS_WORD_REQUEST",
+                    playerName: playerName,
+                    message: message,
+                    roomCode: roomCode,
+                    guessWord: guessWord,
+                });
+                socket.send(request);
+                console.log("GUESS_WORD_REQUEST sent to WebSocket server:", request);
+            } else {
+                console.error("WebSocket is not connected.");
+                port.postMessage({ error: "WebSocket not connected" });
+            }
+        }
+
     };
 
     port.onclose = () => {
