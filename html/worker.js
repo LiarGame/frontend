@@ -131,6 +131,23 @@ onconnect = (e) => {
             }
         }
 
+        if (type === "VOTE_START_REQUEST") {
+            const { playerName, roomCode } = JSON.parse(event.data);
+
+            if (socket && socket.readyState === WebSocket.OPEN) {
+                const request = JSON.stringify({
+                    type: "VOTE_START_REQUEST",
+                    playerName: playerName,
+                    roomCode: roomCode,
+                });
+                socket.send(request);
+                console.log("VOTE_START_REQUEST sent to WebSocket server:", request);
+            } else {
+                console.error("WebSocket is not connected.");
+                port.postMessage({ error: "WebSocket not connected" });
+            }
+        }
+
         if (type === "VOTE_REQUEST") {
             const { voter, suspect, roomCode } = JSON.parse(event.data);
 

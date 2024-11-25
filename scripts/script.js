@@ -373,7 +373,6 @@ window.Discuss = function () {
     second--; // 1초 감소
 
     if (second < 0) {
-      clearInterval(countdown); // 타이머 종료
       //투표 시작 요청
       const request = JSON.stringify({
         type: "VOTE_START_REQUEST", // 요청 타입
@@ -382,6 +381,8 @@ window.Discuss = function () {
       });
       console.log(request);
       worker.port.postMessage(request);
+
+      clearInterval(countdown); // 타이머 종료
     }
   }, 1000);
 }
