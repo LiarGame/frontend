@@ -46,26 +46,28 @@ let lastMessage = null; //같은 SPEAK_RESPONSE가 중복 출력되지 않게 �
 worker.port.onmessage = (event) => {
   // event.data를 JSON으로 파싱
   const message = event.data;
-  if(message === "Worker connected"){
-    console.log("Storage 초기화")
-    sessionStorage.clear();
-  }
-  
-  
+  //서버 수정 후에 주석 해제
+  // sessionStorage.setItem("playerList", JSON.stringify(message.playerList));
+
+  // if(message === "Worker connected"){
+  //   console.log("Storage 초기화")
+  //   sessionStorage.clear();
+  // }
 
   switch (message.type) {
     case "CREATE_ROOM_RESPONSE":
       sessionStorage.setItem("myPlayer", message.playerName);
       sessionStorage.setItem("roomCode", message.roomCode);
-      
+      renderPlayerList(message.playerName);
       break;
 
     case "JOIN_RESPONSE":
       if (window.location.pathname.includes("html/invite.html")) {
-        const playerList = message.playerList;
+        const playerList = JSON.stringify(message.playerList);
+        sessionStorage.setItem("playerList", playerList);
         console.log(message.playerList);
         renderPlayerList(playerList);
-        console.log("Updated player list:", playerList.join(", "));
+        // console.log("Updated player list:", playerList.join(", "));
       }
       if (window.location.pathname.includes("html/room-guest.html")) {
         const playerList = message.playerList; // 배열이어야 함
@@ -90,7 +92,7 @@ worker.port.onmessage = (event) => {
       }
       else {
         lastMessage = message.message;
-        sessionStorage.setItem("speakingPlayerName", message.playerName);
+        sessionStorage.setItem("speakingPlayer", message.playerName);
         sessionStorage.setItem("message", message.message);
         sessionStorage.setItem("nextPlayer", message.nextPlayer);
         receiveMessage();
@@ -109,6 +111,48 @@ worker.port.onmessage = (event) => {
           location.href = "html/liar-win.html";
         }
       }
+    case "DISCUSS_START_RESPONSE":
+      Discuss();
+      break;
+
+    case "DISCUSS_MESSAGE_RESPONSE":
+      if (lastMessage === message.message) {
+        //아무것도 안함
+      }
+      else {
+        lastMessage = message.message;
+        sessionStorage.setItem("speakingPlayer", message.playerName);
+        sessionStorage.setItem("message", message.message);
+        receiveMessage();
+      }
+      break;
+
+    case "VOTE_RESULT":
+      if(message.liarCaught) {
+        if(message.liarName === sessionStorage.getItem("myPlayer")) {
+          location.href = "../html/guess.html";
+        }
+        else {
+          const contentDiv = document.getElementById("contentInvite");
+          contentDiv.replaceChildren();
+
+          const voteDiv = document.createElement("div");
+          voteDiv.id = "voteDiv";
+          voteDiv.classList.add("voteDivStyle");
+          voteDiv.innerHTML = "라이어가 제시어를 맞추는 중입니다..";
+
+          contentDiv.appendChild(voteDiv);
+        }
+        //fall-through
+      }
+      else {
+        //결과 화면 처리
+        break;
+      }
+    case "GAME_RESULT":
+
+      break;
+
     case "ERROR":
       console.log(message.message);
 
@@ -119,7 +163,7 @@ worker.port.onmessage = (event) => {
 
 window.sendHost = function (name) {
   if (isHost) {
-    sessionStorage.setItem("playerName", name);
+    // sessionStorage.setItem("playerName", name);
     console.log(name);
     worker.port.postMessage(
       JSON.stringify({ type: "CREATE_ROOM_REQUEST", playerName: name })
@@ -133,7 +177,7 @@ window.sendHost = function (name) {
 
 window.sendGuest = function (name, roomCode) {
   if (!isHost) {
-    sessionStorage.setItem("playerName", name); // 플레이어 이름을 로컬 저장소에 저장
+    sessionStorage.setItem("myPlayer", name); // 플레이어 이름을 로컬 저장소에 저장
     sessionStorage.setItem("roomCode", roomCode); // 방 코드를 로컬 저장소에 저장
     const request = JSON.stringify({
       type: "JOIN_REQUEST", // 요청 타입
@@ -226,37 +270,27 @@ window.closeModal = function () {
 };
 
 window.sendStartGameRequest = function () {
-  const playername = sessionStorage.getItem("playerName");
-  console.log("player name from sendStartGameRequest: " + playername);
-  const roomcode = sessionStorage.getItem("roomCode");
+  const myPlayer = sessionStorage.getItem("myPlayer");
+  console.log("player name from sendStartGameRequest: " + myPlayer);
+  const roomCode = sessionStorage.getItem("roomCode");
 
   const request = JSON.stringify({
     type: "START_GAME_REQUEST", // 요청 타입
-    playerName: playername, // 플레이어 이름
-    roomCode: roomcode, // 방 코드
+    playerName: myPlayer, // 플레이어 이름
+    roomCode: roomCode, // 방 코드
   });
   worker.port.postMessage(request);
 };
 
 window.releaseRoleAndKeyword = function () {
-  let player = sessionStorage.getItem("playerName")
-  let roomNumber = sessionStorage.getItem("roomCode")
-  // const request = JSON.stringify({
-  //   type: "START_GAME_REQUEST", // 요청 타입
-  //   playerName: player, // 플레이어 이름
-  //   roomCode: roomNumber, // 방 코드
-  // });
-  // console.log(request);
-  // worker.port.postMessage(request);
-  
   const contentDiv = document.querySelector(".content");
   contentDiv.innerHTML = "";
 
   const pTag = document.createElement("p");
   pTag.classList.add("pTag");
 
-  const playername = sessionStorage.getItem("playerName");
-  console.log("player name: " + playername);
+  const myPlayer = sessionStorage.getItem("myPlayer");
+  console.log("my name: " + myPlayer);
   const role_liar = sessionStorage.getItem("liar")
   console.log("who is liar: " + role_liar);
   const topic = sessionStorage.getItem("topic");
@@ -279,7 +313,7 @@ window.releaseRoleAndKeyword = function () {
       console.log("ROLE_ASSIGN_RESPONSE error");
   }
 
-  if(role_liar === playername) {
+  if(role_liar === myPlayer) {
     pTag.innerHTML =
         '당신은 라이어입니다<br>';
   } else {
@@ -315,21 +349,6 @@ window.startGame = function () {
   console.log("게임이 시작됩니다.");
 };
 
-window.checkChatInput = function () {
-  const chatInput = document.getElementById("chatInput");
-
-  function checkChatInput() {
-    const chatSender = document.querySelector(".chat-input-area img");
-
-    if (chatInput.value.length > 0) {
-      chatSender.src = "../img/msg-send-black.png";
-    } else {
-      chatSender.src = "../img/msg-send.png";
-    }
-  }
-  chatInput.addEventListener("input", checkChatInput);
-};
-
 window.showChatDisplay = function () {
   const contentDiv = document.querySelector(".content");
   const chatDiv = document.querySelector("#chatDiv");
@@ -339,19 +358,38 @@ window.showChatDisplay = function () {
   }
 };
 
-window.speakOrderManage = function () {
-  const playerList = sessionStorage.getItem("playerList");
-  console.log(playerList);
-  const player = sessionStorage.getItem("playerName");
-  const nextPlayer = sessionStorage.getItem("nextPlayer");
-
-
+window.speakKeyword = function () {
+  const myPlayer = sessionStorage.getItem("myPlayer");
+  sendMessage(myPlayer);
 }
 
-window.sendMessage = function () {
+window.Discuss = function () {
+  //전체 토론 시작
+  const chatSender = document.getElementById("chatSender");
+  chatSender.onclick = sendDiscussMessage;
+
+  const contentDiv = document.getElementById("contentInvite");
+  const secondPTag = document.createElement("p");
+  secondPTag.classList.add("secondPTagStyle");
+  contentDiv.appendChild(secondPTag);
+
+
+  let second = 60;
+  const countdown = setInterval(() => {
+    secondPTag.textContent = second; // 남은 시간 표시
+    second--; // 1초 감소
+
+    if (second < 0) {
+      clearInterval(countdown); // 타이머 종료
+      //라이어 투표
+      voteLiar();
+    }
+  }, 1000);
+}
+
+window.sendMessage = function (currentPlayer) {
   const chatInput = document.getElementById("chatInput");
 
-  const player = sessionStorage.getItem("playerName");
   const roomCode = sessionStorage.getItem("roomCode");
   const message = chatInput.value;
 
@@ -359,7 +397,7 @@ window.sendMessage = function () {
     //메시지 보내기 요청
     const request = JSON.stringify({
       type: "SPEAK_REQUEST", // 요청 타입
-      playerName: player, // 플레이어 이름
+      playerName: currentPlayer, // 플레이어 이름
       message: message,
       roomCode: roomCode, // 방 코드
     });
@@ -373,67 +411,49 @@ window.sendMessage = function () {
 
 window.receiveMessage = function () {
   const myPlayer = sessionStorage.getItem("myPlayer");
-  const player = sessionStorage.getItem("playerName");
+  const speakingPlayer = sessionStorage.getItem("speakingPlayer");
   const receivedMessage = sessionStorage.getItem("message");
 
   const chatMessages = document.getElementById("chatMessages");
-  if (myPlayer === player) {
+  if (myPlayer === speakingPlayer) {
     const myPTag = document.createElement("p");
     myPTag.classList.add("myMsg");
-    myPTag.innerHTML = `${player} : ${receivedMessage}`;
+    myPTag.innerHTML = `${speakingPlayer} : ${receivedMessage}`;
     chatMessages.appendChild(myPTag);
-  }
-  else {
+  } else {
     const otherPTag = document.createElement("p");
     otherPTag.classList.add("otherMsg");
-    otherPTag.innerHTML = `${player} : ${receivedMessage}`;
+    otherPTag.innerHTML = `${speakingPlayer} : ${receivedMessage}`;
     chatMessages.appendChild(otherPTag);
   }
 }
 
-    // // 새 메시지 추가
-    // const message = document.createElement("p");
-    // message.classList.add("myMsg");
-    // message.innerHTML = `${chatInput.value}`;
-    // // <span className="chat-sender">나</span>
-    //
-    //
-    // chatMessages.appendChild(message); // 메시지 영역에 추가
-    //
-    // chatInput.value = ""; // 입력 필드 초기화
-    //
-    // // 라이어 지목창으로 이동
-    // setTimeout(() => {
-    //   if (chatDiv) {
-    //     const findpTag = document.querySelector(".pTag");
-    //     findpTag.innerHTML =
-    //       '<b style="color: red;">라이어로 의심되는 사람을 지목해 주세요!</b>';
-    //     chatDiv.style.display = "none";
-    //   }
-    // }, 4000);
-    //
-    // // 버튼 클릭시 페이지 전환 추가
-    // const buttonElements = document.querySelectorAll(
-    //   ".overlap-group111.btn-16"
-    // );
-    // buttonElements.forEach((buttonElement) => {
-    //   buttonElement.addEventListener("click", () => {
-    //     // 화면 전환: 원하는 URL로 변경하세요
-    //     window.location.href = "../html/guess.html"; // 예: 'page2.html'
-    //   });
-    // });
+window.sendDiscussMessage = function () {
+  const chatInput = document.getElementById("chatInput");
 
-window.DiscussKeyword = function () {
-  //발언 순서 관리
-  speakOrderManage();
-  sendMessage();
+  const myPlayer = sessionStorage.getItem("myPlayer");
+  const roomCode = sessionStorage.getItem("roomCode");
+  const message = chatInput.value;
 
-  setTimeout(() => {
-    voteLiar();
-  },2000);
+  if (chatInput.value.trim() !== "") {
+    //메시지 보내기 요청
+    const request = JSON.stringify({
+      type: "DISCUSS_MESSAGE_REQUEST", // 요청 타입
+      playerName: myPlayer, // 플레이어 이름
+      message: message,
+      roomCode: roomCode, // 방 코드
+    });
+    console.log(request);
+    worker.port.postMessage(request);
+    chatInput.value = '';
+  } else {
+    console.log("메시지를 입력하세요");
+  }
 }
 
 window.voteLiar = function () {
+  const myPlayer = sessionStorage.getItem("myPlayer");
+  const roomCode = sessionStorage.getItem("roomCode");
   const contentDiv = document.getElementById("contentInvite");
   contentDiv.replaceChildren();
 
@@ -448,17 +468,17 @@ window.voteLiar = function () {
   contentDiv.appendChild(voteDiv);
   contentDiv.appendChild(secondPTag);
 
-  // let second = 15;
-  // const countdown = setInterval(() => {
-  //   secondPTag.textContent = second; // 남은 시간 표시
-  //   second--; // 1초 감소
-  //
-  //   if (second < 0) {
-  //     clearInterval(countdown); // 타이머 종료
-  //     //라이어로 지목된 사람은 제시어 맞추기
-  //     location.href = "../html/guess.html";
-  //   }
-  // }, 1000);
+  let second = 15;
+  const countdown = setInterval(() => {
+    secondPTag.textContent = second; // 남은 시간 표시
+    second--; // 1초 감소
+
+    if (second < 0) {
+      clearInterval(countdown); // 타이머 종료
+      //라이어로 지목된 사람은 제시어 맞추기
+      // location.href = "../html/guess.html";
+    }
+  }, 1000);
 
   const voteBtns = document.querySelectorAll(".voteBtn");
   voteBtns.forEach((voteBtn) => {
@@ -469,20 +489,36 @@ window.voteLiar = function () {
       voteBtn.classList.remove("not-selected");
       voteBtn.classList.add("selected");
       const votedPlayer = voteBtn.textContent;
-      sendVote(votedPlayer);
+      sendVote(myPlayer, votedPlayer, roomCode);
     });
   });
 }
 
-window.sendVote = function (votedPlayer) {
+window.sendVote = function (myPlayer, votedPlayer, roomCode) {
   console.log(votedPlayer + "을(를) 라이어로 지목했습니다.");
   //투표 요청
+  const request = JSON.stringify({
+    type: "VOTE_REQUEST", // 요청 타입
+    voter: myPlayer, // 플레이어 이름
+    suspect: votedPlayer,
+    roomCode: roomCode, // 방 코드
+  });
+  console.log(request);
+  worker.port.postMessage(request);
 };
-
 
 // 최종 답 보내기
 window.sendFinalAnswer = function () {
-  const inputValue = document.querySelector('input[type="text"]').value; // 입력 필드의 값을 가져옴
-  console.log(inputValue); // 콘솔에 출력
-  location.href = "../html/liar-win.html"; // 방 만들기 후 페이지 이동
+  const myPlayer = sessionStorage.getItem("myPlayer");
+  const guessKeywordInput = document.getElementById("guessKeywordInput").value;
+  const roomCode = sessionStorage.getItem("roomCode");
+  const request = JSON.stringify({
+    type: "GUESS_WORD_REQUEST",
+    playerName: myPlayer,
+    message: guessKeywordInput, //이건 뭐지
+    roomCode: roomCode,
+    guessWord: guessKeywordInput
+  });
+  console.log(request);
+  worker.port.postMessage(request);
 };
