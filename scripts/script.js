@@ -46,8 +46,7 @@ let lastMessage = null; //같은 SPEAK_RESPONSE가 중복 출력되지 않게 �
 worker.port.onmessage = (event) => {
   // event.data를 JSON으로 파싱
   const message = event.data;
-  //서버 수정 후에 주석 해제
-  // sessionStorage.setItem("playerList", JSON.stringify(message.playerList));
+  sessionStorage.setItem("playerList", JSON.stringify(message.playerList));
 
   // if(message === "Worker connected"){
   //   console.log("Storage 초기화")
@@ -58,23 +57,21 @@ worker.port.onmessage = (event) => {
     case "CREATE_ROOM_RESPONSE":
       sessionStorage.setItem("myPlayer", message.playerName);
       sessionStorage.setItem("roomCode", message.roomCode);
-      renderPlayerList(message.playerName);
+      renderPlayerList(JSON.parse(sessionStorage.getItem("playerList")));
       break;
 
     case "JOIN_RESPONSE":
       if (window.location.pathname.includes("html/invite.html")) {
-        const playerList = JSON.stringify(message.playerList);
-        sessionStorage.setItem("playerList", playerList);
+        const playerList = JSON.parse(sessionStorage.getItem("playerList"));
         console.log(message.playerList);
         renderPlayerList(playerList);
-        // console.log("Updated player list:", playerList.join(", "));
       }
-      if (window.location.pathname.includes("html/room-guest.html")) {
-        const playerList = message.playerList; // 배열이어야 함
-        console.log(message.playerList);
-        const playerListString = JSON.stringify(playerList); // 배열을 JSON 문자열로 변환
-        sessionStorage.setItem("playerList", playerListString); // 변환된 문자열 저장
-      }
+      // if (window.location.pathname.includes("html/room-guest.html")) {
+      //   const playerList = message.playerList; // 배열이어야 함
+      //   console.log(message.playerList);
+      //   const playerListString = JSON.stringify(playerList); // 배열을 JSON 문자열로 변환
+      //   sessionStorage.setItem("playerList", playerListString); // 변환된 문자열 저장
+      // }
       break;
 
     case "ROLE_ASSIGN_RESPONSE":
@@ -98,7 +95,7 @@ worker.port.onmessage = (event) => {
         receiveMessage();
       }
       break;
-    
+
     // 게임 결과화면
     case "GAME_RESULT":
       sessionStorage.setItem("citizen", message.citizen);
@@ -111,6 +108,7 @@ worker.port.onmessage = (event) => {
           location.href = "html/liar-win.html";
         }
       }
+
     case "DISCUSS_START_RESPONSE":
       Discuss();
       break;
@@ -167,7 +165,6 @@ worker.port.onmessage = (event) => {
 
 window.sendHost = function (name) {
   if (isHost) {
-    // sessionStorage.setItem("playerName", name);
     console.log(name);
     worker.port.postMessage(
       JSON.stringify({ type: "CREATE_ROOM_REQUEST", playerName: name })
@@ -215,14 +212,6 @@ window.renderPlayerList = function (playerList) {
     roomCodeElement.innerHTML = roomCode;
   }
   if (playerList) {
-    if(!Array.isArray(playerList)) {
-      const playerElement = document.createElement("button");
-      playerElement.className = "overlap-group111 voteBtn not-selected"; // 여러 클래스 이름 추가
-      playerElement.textContent = playerList;
-
-      userListContainer.appendChild(playerElement);
-    }
-    else {
       playerList.forEach((player) => {
         const playerElement = document.createElement("button");
         playerElement.className = "overlap-group111 voteBtn not-selected"; // 여러 클래스 이름 추가
@@ -230,7 +219,6 @@ window.renderPlayerList = function (playerList) {
 
         userListContainer.appendChild(playerElement);
       });
-    }
   } else {
     console.log("저장된 플레이어 리스트가 없습니다.");
   }
