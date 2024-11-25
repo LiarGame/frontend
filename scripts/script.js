@@ -66,7 +66,7 @@ worker.port.onmessage = (event) => {
       }
       else {
         lastMessage = message.message;
-        sessionStorage.setItem("speakingPlayer", message.playerName);
+        sessionStorage.setItem("speakingPlayer", message.speakingPlayer);
         sessionStorage.setItem("message", message.message);
         sessionStorage.setItem("nextPlayer", message.nextPlayer);
         receiveMessage();
@@ -87,6 +87,10 @@ worker.port.onmessage = (event) => {
         sessionStorage.setItem("message", message.message);
         receiveMessage();
       }
+      break;
+
+    case "VOTE_START_RESPONSE":
+      voteLiar();
       break;
 
     case "VOTE_RESULT":
@@ -326,6 +330,7 @@ window.speakKeyword = function () {
 }
 
 window.Discuss = function () {
+  const myPlayer = sessionStorage.getItem("myPlayer");
   //전체 토론 시작
   const chatSender = document.getElementById("chatSender");
   chatSender.onclick = sendDiscussMessage;
@@ -343,8 +348,14 @@ window.Discuss = function () {
 
     if (second < 0) {
       clearInterval(countdown); // 타이머 종료
-      //라이어 투표
-      voteLiar();
+      //투표 시작 요청
+      const request = JSON.stringify({
+        type: "VOTE_START_REQUEST", // 요청 타입
+        playerName: myPlayer, // 플레이어 이름,
+        roomCode: roomCode, // 방 코드
+      });
+      console.log(request);
+      worker.port.postMessage(request);
     }
   }, 1000);
 }
