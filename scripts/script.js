@@ -79,7 +79,8 @@ worker.port.onmessage = (event) => {
       sessionStorage.setItem("topic", message.topic);
       sessionStorage.setItem("word", message.word);
       if (window.location.pathname.includes("html/invite.html")){
-        window.startGame();
+        if(isHost == false)
+          {window.startGame();}
       }
       break;
 
@@ -332,6 +333,7 @@ window.startGame = function () {
   if(sessionStorage.getItem("playerList"))
   setTimeout(() => {}, 500); // 500ms = 0.5초
   if(isHost){
+    console.log("게임 시작 요청을 보내요")
     sendStartGameRequest();
   }
   closeModal();
