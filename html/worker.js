@@ -9,20 +9,24 @@ onconnect = (e) => {
 
     // WebSocket 연결
     if (!socket) {
-        socket = new WebSocket('ws://localhost:8080'); // WebSocket 서버 주소
+        socket = new WebSocket('ws://192.168.87.136:8080'); // WebSocket 서버 주소
         socket.onopen = () => {
             
             // WebSocket이 연결되면 SharedWorker에 연결 상태를 전달
             connections.forEach(conn => conn.postMessage("Worker connected"));
         };
-
+        
         socket.onerror = (error) => {
             console.error('WebSocket error:', error);
         };
 
-        socket.onclose = () => {
-            console.log('WebSocket closed');
-            socket = null;
+        socket.onclose = (event) => {
+            const playerName = sessionStorage.getItem("playerName");
+            const roomCode = sessionStorage.getItem("roomCode");
+            // 일정 시간 후 재연결
+            setTimeout(() => {
+                socket = new WebSocket(`ws://192.168.87.136:8080?playerName=${playerName}&roomCode=${roomCode}`);
+            }, 2000); // 2초 후 재연결 시도
         };
 
         // WebSocket 메시지 수신 핸들러 설정
