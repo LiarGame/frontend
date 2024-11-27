@@ -328,23 +328,57 @@
     border-radius: 5px;
     gap: 10px;
 }
-
+.myMsgDiv {
+    display: inline-block;
+    align-self: flex-end; /* 메시지를 오른쪽에 정렬 */
+    max-width: 73%;
+    word-wrap: break-word;
+    text-align: right;
+    color: black;
+}
+.myName {
+    display: inline-block;
+    align-self: flex-end; /* 메시지를 오른쪽에 정렬 */
+    word-wrap: break-word;
+    text-align: right;
+    color: black;
+    font-weight: bold;
+    font-size: 17px;
+    padding: 7px;
+}
 .myMsg {
     display: inline-block;
     align-self: flex-end; /* 메시지를 오른쪽에 정렬 */
-    max-width: 70%;
     word-wrap: break-word;
-    text-align: left;
+    text-align: right;
     color: black;
     font-size: 15px;
     background-color: white;
     border-radius: 40px;
     padding: 12px;
 }
-.otherMsg {
+.otherMsgDiv {
+    display: inline-block;
+    /*align-self: flex-start; !* 메시지를 오른쪽에 정렬 *!*/
+    max-width: 73%;
+    word-wrap: break-word;
+    text-align: left;
+    color: black;
+}
+.otherName {
     display: inline-block;
     align-self: flex-start; /* 메시지를 오른쪽에 정렬 */
-    max-width: 70%;
+    float: left;
+    word-wrap: break-word;
+    text-align: left;
+    color: black;
+    font-weight: bold;
+    font-size: 17px;
+    padding: 7px;
+}
+.otherMsg {
+    display: inline-block;
+    /*align-self: flex-start; !* 메시지를 오른쪽에 정렬 *!*/
     word-wrap: break-word;
     text-align: left;
     color: black;
@@ -363,6 +397,7 @@
     width: 95%;
     height: 50px;
     bottom: 10px;
+    margin-top: 10px;
     position: absolute;
     display: flex;
     gap: 10px;

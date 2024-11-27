@@ -89,6 +89,9 @@ worker.port.onmessage = (event) => {
         //아무것도 안함
       }
       else {
+        if(message.startDiscussFlag === true) {
+          Discuss();
+        }
         lastMessage = message.message;
         sessionStorage.setItem("speakingPlayer", message.speakingPlayer);
         sessionStorage.setItem("message", message.message);
@@ -110,9 +113,9 @@ worker.port.onmessage = (event) => {
         }
       }
 
-    case "DISCUSS_START_RESPONSE":
-      Discuss();
-      break;
+    // case "DISCUSS_START_RESPONSE":
+    //   Discuss();
+    //   break;
 
     case "DISCUSS_MESSAGE_RESPONSE":
       if (lastMessage === message.message) {
@@ -128,6 +131,10 @@ worker.port.onmessage = (event) => {
 
     case "VOTE_START_RESPONSE":
       voteLiar();
+      break;
+
+    case "VOTE_RESPONSE":
+      console.log(message);
       break;
 
     case "VOTE_RESULT":
@@ -281,41 +288,42 @@ window.releaseRoleAndKeyword = function () {
 
   const pTag = document.createElement("p");
   pTag.classList.add("pTag");
+  setTimeout(() => {
+    const myPlayer = sessionStorage.getItem("myPlayer");
+    console.log("my name: " + myPlayer);
+    const role_liar = sessionStorage.getItem("liar")
+    console.log("who is liar: " + role_liar);
+    const topic = sessionStorage.getItem("topic");
+    console.log(topic);
+    const keyword = sessionStorage.getItem("word");
+    console.log(keyword);
 
-  const myPlayer = sessionStorage.getItem("myPlayer");
-  console.log("my name: " + myPlayer);
-  const role_liar = sessionStorage.getItem("liar")
-  console.log("who is liar: " + role_liar);
-  const topic = sessionStorage.getItem("topic");
-  console.log(topic);
-  const keyword = sessionStorage.getItem("word");
-  console.log(keyword);
+    let topic_kor
+    switch (topic) {
+      case "BUILDING":
+        topic_kor = "건국대학교 건물";
+        break;
+      case "LANDMARK":
+        topic_kor = "건국대학교 명소";
+        break;
+      case "ANIMAL":
+        topic_kor = "건국대학교 동물";
+        break;
+      default:
+        console.log("ROLE_ASSIGN_RESPONSE error");
+    }
 
-  let topic_kor
-  switch (topic) {
-    case "BUILDING":
-      topic_kor = "건국대학교 건물";
-      break;
-    case "LANDMARK":
-      topic_kor = "건국대학교 명소";
-      break;
-    case "ANIMAL":
-      topic_kor = "건국대학교 동물";
-      break;
-    default:
-      console.log("ROLE_ASSIGN_RESPONSE error");
-  }
-
-  if(role_liar === myPlayer) {
-    pTag.innerHTML =
-        '당신은 라이어입니다<br>';
-  } else {
-    pTag.innerHTML =
-        '당신은 시민입니다<br>' +
-        '주제는 ' + topic_kor + '이고, ' +
-        '제시어는 ' + keyword + '입니다.';
-  }
-  contentDiv.appendChild(pTag);
+    if(role_liar === myPlayer) {
+      pTag.innerHTML =
+          '당신은 라이어입니다<br>';
+    } else {
+      pTag.innerHTML =
+          '당신은 시민입니다<br>' +
+          '주제는 ' + topic_kor + '이고, ' +
+          '제시어는 ' + keyword + '입니다.';
+    }
+    contentDiv.appendChild(pTag);
+  }, 300);
 
   //3초 후에 위치 이동
   setTimeout(() => {
@@ -325,7 +333,7 @@ window.releaseRoleAndKeyword = function () {
   //5초 후에 제시어 설명 시작
   setTimeout(() => {
     showChatDisplay();
-  }, 8000);
+  }, 6000);
 };
 
 // 초대창 -> 게임 시작
@@ -359,6 +367,7 @@ window.speakKeyword = function () {
 
 window.Discuss = function () {
   const myPlayer = sessionStorage.getItem("myPlayer");
+  const roomCode = sessionStorage.getItem("roomCode");
   //전체 토론 시작
   const chatSender = document.getElementById("chatSender");
   chatSender.onclick = sendDiscussMessage;
@@ -369,7 +378,7 @@ window.Discuss = function () {
   contentDiv.appendChild(secondPTag);
 
 
-  let second = 60;
+  let second = 20;
   const countdown = setInterval(() => {
     secondPTag.textContent = second; // 남은 시간 표시
     second--; // 1초 감소
@@ -418,16 +427,31 @@ window.receiveMessage = function () {
 
   const chatMessages = document.getElementById("chatMessages");
   if (myPlayer === speakingPlayer) {
-    const myPTag = document.createElement("p");
-    myPTag.classList.add("myMsg");
-    myPTag.innerHTML = `${speakingPlayer} : ${receivedMessage}`;
-    chatMessages.appendChild(myPTag);
+    const myDiv = document.createElement("div");
+    myDiv.classList.add("myMsgDiv");
+    const myMsgPTag = document.createElement("p");
+    const myNamePTag = document.createElement("p");
+    myDiv.appendChild(myMsgPTag);
+    myDiv.appendChild(myNamePTag);
+    myMsgPTag.classList.add("myMsg");
+    myMsgPTag.innerHTML = `${receivedMessage}`;
+    myNamePTag.classList.add("myName");
+    myNamePTag.innerHTML = `${speakingPlayer}`;
+    chatMessages.appendChild(myDiv);
   } else {
-    const otherPTag = document.createElement("p");
-    otherPTag.classList.add("otherMsg");
-    otherPTag.innerHTML = `${speakingPlayer} : ${receivedMessage}`;
-    chatMessages.appendChild(otherPTag);
+    const otherDiv = document.createElement("div");
+    otherDiv.classList.add("otherMsgDiv");
+    const otherMsgPTag = document.createElement("p");
+    const otherNamePTag = document.createElement("p");
+    otherDiv.appendChild(otherNamePTag);
+    otherDiv.appendChild(otherMsgPTag);
+    otherMsgPTag.classList.add("otherMsg");
+    otherMsgPTag.innerHTML = `${receivedMessage}`;
+    otherNamePTag.classList.add("otherName");
+    otherNamePTag.innerHTML = `${speakingPlayer}`;
+    chatMessages.appendChild(otherDiv);
   }
+  chatMessages.scrollTop = chatMessages.scrollHeight;
 }
 
 window.sendDiscussMessage = function () {
@@ -484,7 +508,7 @@ window.voteLiar = function () {
 
   const voteBtns = document.querySelectorAll(".voteBtn");
   voteBtns.forEach((voteBtn) => {
-    voteBtn.addEventListener("click", () => {
+    voteBtn.onclick =  function () {
       voteBtns.forEach((voteBtn) => {
         voteBtn.classList.remove("selected");
       });
@@ -492,7 +516,7 @@ window.voteLiar = function () {
       voteBtn.classList.add("selected");
       const votedPlayer = voteBtn.textContent;
       sendVote(myPlayer, votedPlayer, roomCode);
-    });
+    };
   });
 }
 
