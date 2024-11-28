@@ -441,8 +441,8 @@ window.receiveMessage = function () {
     myDiv.classList.add("myMsgDiv");
     const myMsgPTag = document.createElement("p");
     const myNamePTag = document.createElement("p");
-    myDiv.appendChild(myMsgPTag);
     myDiv.appendChild(myNamePTag);
+    myDiv.appendChild(myMsgPTag);
     myMsgPTag.classList.add("myMsg");
     myMsgPTag.innerHTML = `${receivedMessage}`;
     myNamePTag.classList.add("myName");
