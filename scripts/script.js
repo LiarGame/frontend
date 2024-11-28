@@ -46,11 +46,13 @@ let lastMessage = null; //같은 SPEAK_RESPONSE가 중복 출력되지 않게 �
 worker.port.onmessage = (event) => {
   // event.data를 JSON으로 파싱
   const message = event.data;
+  console.log(message);
+  sessionStorage.setItem("message", message);
   sessionStorage.setItem("playerList", JSON.stringify(message.playerList));
 
-  // if(message === "Worker connected"){
-  //   console.log("Storage 초기화")
-  //   sessionStorage.clear();
+  // if(message === "Disconnected"){
+  //   console.log("웹소켓 연결 끉킴")
+  //   // sessionStorage.clear();
   // }
 
   switch (message.type) {
@@ -81,6 +83,9 @@ worker.port.onmessage = (event) => {
       if (window.location.pathname.includes("html/invite.html")){
         if(isHost == false)
           {window.startGame();}
+        else{
+          releaseRoleAndKeyword();
+        }
       }
       break;
 
@@ -337,8 +342,13 @@ window.startGame = function () {
     sendStartGameRequest();
   }
   closeModal();
+
   //제시어 공개
-  releaseRoleAndKeyword();
+  if(!isHost){
+    releaseRoleAndKeyword();
+  }
+  
+  
 
   console.log("게임이 시작됩니다.");
 };
