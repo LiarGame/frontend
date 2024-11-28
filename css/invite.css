@@ -301,6 +301,10 @@
     line-height: normal;
 }
 
+.currentSpeakingPlayer {
+    border: 3px solid black;
+}
+
 #chatDiv {
     width: 60%;
     height: 80%;
@@ -329,9 +333,10 @@
     gap: 10px;
 }
 .myMsgDiv {
-    display: inline-block;
+    display: flex;
     align-self: flex-end; /* 메시지를 오른쪽에 정렬 */
-    max-width: 73%;
+    flex-direction: column;
+    max-width: 70%;
     word-wrap: break-word;
     text-align: right;
     color: black;
@@ -344,7 +349,7 @@
     color: black;
     font-weight: bold;
     font-size: 17px;
-    padding: 7px;
+    padding: 7px 7px 4px 7px;
 }
 .myMsg {
     display: inline-block;
@@ -358,9 +363,10 @@
     padding: 12px;
 }
 .otherMsgDiv {
-    display: inline-block;
-    /*align-self: flex-start; !* 메시지를 오른쪽에 정렬 *!*/
-    max-width: 73%;
+    display: flex;
+    align-self: flex-start; /* 메시지를 오른쪽에 정렬 */
+    flex-direction: column;
+    max-width: 70%;
     word-wrap: break-word;
     text-align: left;
     color: black;
@@ -368,17 +374,16 @@
 .otherName {
     display: inline-block;
     align-self: flex-start; /* 메시지를 오른쪽에 정렬 */
-    float: left;
     word-wrap: break-word;
     text-align: left;
     color: black;
     font-weight: bold;
     font-size: 17px;
-    padding: 7px;
+    padding: 7px 7px 4px 7px;
 }
 .otherMsg {
     display: inline-block;
-    /*align-self: flex-start; !* 메시지를 오른쪽에 정렬 *!*/
+    align-self: flex-start; /* 메시지를 오른쪽에 정렬 */
     word-wrap: break-word;
     text-align: left;
     color: black;
