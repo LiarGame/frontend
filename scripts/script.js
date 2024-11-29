@@ -46,12 +46,24 @@ let lastMessage = null; //같은 SPEAK_RESPONSE가 중복 출력되지 않게 �
 worker.port.onmessage = (event) => {
   // event.data를 JSON으로 파싱
   const message = event.data;
+  console.log(message);
   sessionStorage.setItem("playerList", JSON.stringify(message.playerList));
 
-  // if(message === "Worker connected"){
-  //   console.log("Storage 초기화")
-  //   sessionStorage.clear();
-  // }
+  if(message === "Worker Reloaded"){
+    if(sessionStorage.getItem("myPlayer") !== null && sessionStorage.getItem("roomCode") !== null){
+      console.log("재연결 요청");
+      const playerName = sessionStorage.getItem("myPlayer");
+      const roomCode = sessionStorage.getItem("roomCode");
+      const request = JSON.stringify({
+        type: "RECONNECT_REQUEST",
+        playerName: playerName,
+        roomCode: roomCode
+      });
+      console.log(request);
+      worker.port.postMessage(request);
+      return;
+    }
+  }
 
   switch (message.type) {
     case "CREATE_ROOM_RESPONSE":
@@ -81,6 +93,9 @@ worker.port.onmessage = (event) => {
       if (window.location.pathname.includes("html/invite.html")){
         if(isHost == false)
           {window.startGame();}
+        else{
+          releaseRoleAndKeyword();
+        }
       }
       break;
 
@@ -136,7 +151,7 @@ worker.port.onmessage = (event) => {
     case "VOTE_RESPONSE":
       console.log(message);
       break;
-
+    
     case "VOTE_RESULT":
       if(message.liarCaught) {
         if(message.liarName === sessionStorage.getItem("myPlayer")) {
@@ -345,8 +360,13 @@ window.startGame = function () {
     sendStartGameRequest();
   }
   closeModal();
+
   //제시어 공개
-  releaseRoleAndKeyword();
+  if(!isHost){
+    releaseRoleAndKeyword();
+  }
+  
+  
 
   console.log("게임이 시작됩니다.");
 };
