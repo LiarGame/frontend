@@ -4,7 +4,6 @@ let playerList = []; // 플레이어 리스트
 // SharedWorker에서 연결 관리
 onconnect = (e) => {
     const port = e.ports[0];
-    console.log("New connection established with a page.");
     connections.push(port);
 
     // WebSocket 연결
@@ -17,7 +16,8 @@ onconnect = (e) => {
         };
         
         socket.onerror = (error) => {
-            console.error('WebSocket error:', error);
+            // 로그용
+            port.postMessage({ error: "WebSocket Error Occur" });
         };
 
         socket.onclose = (event) => {
@@ -32,7 +32,6 @@ onconnect = (e) => {
         // WebSocket 메시지 수신 핸들러 설정
         socket.onmessage = (event) => {
             const message = JSON.parse(event.data);
-            console.log('Received message:', message);
             // WebSocket으로부터 받은 메시지를 모든 연결된 포트로 전송
             connections.forEach((conn) => {
                 conn.postMessage(message);
@@ -45,7 +44,6 @@ onconnect = (e) => {
 
         // CREATE_ROOM_REQUEST 처리
         if (type === "CREATE_ROOM_REQUEST") {
-            console.log("Processing CREATE_ROOM_REQUEST:", playerName);
 
             if (socket && socket.readyState === WebSocket.OPEN) {
                 const request = JSON.stringify({
@@ -53,9 +51,7 @@ onconnect = (e) => {
                     playerName: playerName,
                 });
                 socket.send(request);
-                console.log("CREATE_ROOM_REQUEST sent to WebSocket server:", request);
             } else {
-                console.error("WebSocket is not connected.");
                 port.postMessage({ error: "WebSocket not connected" });
             }
         }
@@ -63,7 +59,6 @@ onconnect = (e) => {
         // JOIN_REQUEST 처리
         if (type === "JOIN_REQUEST") {
             const { roomCode } = JSON.parse(event.data);
-            console.log("Processing JOIN_REQUEST:", playerName, roomCode);
 
             if (socket && socket.readyState === WebSocket.OPEN) {
                 const request = JSON.stringify({
@@ -72,9 +67,7 @@ onconnect = (e) => {
                     roomCode: roomCode,
                 });
                 socket.send(request);
-                console.log("JOIN_REQUEST sent to WebSocket server:", request);
             } else {
-                console.error("WebSocket is not connected.");
                 port.postMessage({ error: "WebSocket not connected" });
             }
         }
@@ -94,7 +87,6 @@ onconnect = (e) => {
 
         if (type === "START_GAME_REQUEST") {
             const { playerName, roomCode } = JSON.parse(event.data);
-            console.log("Processing START_GAME_REQUEST:", playerName, roomCode);
 
             if (socket && socket.readyState === WebSocket.OPEN) {
                 const request = JSON.stringify({
@@ -103,16 +95,13 @@ onconnect = (e) => {
                     roomCode: roomCode,
                 });
                 socket.send(request);
-                console.log("START_GAME_REQUEST sent to WebSocket server:", request);
             } else {
-                console.error("WebSocket is not connected.");
                 port.postMessage({ error: "WebSocket not connected" });
             }
         }
 
         if (type === "SPEAK_REQUEST") {
             const { playerName, message, roomCode } = JSON.parse(event.data);
-            console.log("Processing SPEAK_REQUEST:", playerName, message, roomCode);
 
             if (socket && socket.readyState === WebSocket.OPEN) {
                 const request = JSON.stringify({
@@ -122,16 +111,13 @@ onconnect = (e) => {
                     roomCode: roomCode,
                 });
                 socket.send(request);
-                console.log("SPEAK_REQUEST sent to WebSocket server:", request);
             } else {
-                console.error("WebSocket is not connected.");
                 port.postMessage({ error: "WebSocket not connected" });
             }
         }
 
         if (type === "DISCUSS_MESSAGE_REQUEST") {
             const { playerName, message, roomCode } = JSON.parse(event.data);
-            console.log("Processing DISCUSS_MESSAGE_REQUEST:", playerName, message, roomCode);
 
             if (socket && socket.readyState === WebSocket.OPEN) {
                 const request = JSON.stringify({
@@ -141,9 +127,7 @@ onconnect = (e) => {
                     roomCode: roomCode,
                 });
                 socket.send(request);
-                console.log("DISCUSS_MESSAGE_REQUEST sent to WebSocket server:", request);
             } else {
-                console.error("WebSocket is not connected.");
                 port.postMessage({ error: "WebSocket not connected" });
             }
         }
@@ -158,9 +142,7 @@ onconnect = (e) => {
                     roomCode: roomCode,
                 });
                 socket.send(request);
-                console.log("VOTE_START_REQUEST sent to WebSocket server:", request);
             } else {
-                console.error("WebSocket is not connected.");
                 port.postMessage({ error: "WebSocket not connected" });
             }
         }
@@ -176,9 +158,7 @@ onconnect = (e) => {
                     roomCode: roomCode,
                 });
                 socket.send(request);
-                console.log("VOTE_REQUEST sent to WebSocket server:", request);
             } else {
-                console.error("WebSocket is not connected.");
                 port.postMessage({ error: "WebSocket not connected" });
             }
         }
@@ -195,9 +175,7 @@ onconnect = (e) => {
                     guessWord: guessWord,
                 });
                 socket.send(request);
-                console.log("GUESS_WORD_REQUEST sent to WebSocket server:", request);
             } else {
-                console.error("WebSocket is not connected.");
                 port.postMessage({ error: "WebSocket not connected" });
             }
         }
