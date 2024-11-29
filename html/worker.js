@@ -13,7 +13,7 @@ onconnect = (e) => {
         socket.onopen = () => {
             
             // WebSocket이 연결되면 SharedWorker에 연결 상태를 전달
-            connections.forEach(conn => conn.postMessage("Worker connected"));
+            connections.forEach(conn => conn.postMessage("Worker Reloaded"));
         };
         
         socket.onerror = (error) => {
@@ -25,7 +25,7 @@ onconnect = (e) => {
             const roomCode = sessionStorage.getItem("roomCode");
             // 일정 시간 후 재연결
             setTimeout(() => {
-                socket = new WebSocket(`ws://192.168.87.136:8080?playerName=${playerName}&roomCode=${roomCode}`);
+                socket = new WebSocket(`ws://localhost:8080?playerName=${playerName}&roomCode=${roomCode}`);
             }, 2000); // 2초 후 재연결 시도
         };
 
@@ -76,6 +76,19 @@ onconnect = (e) => {
             } else {
                 console.error("WebSocket is not connected.");
                 port.postMessage({ error: "WebSocket not connected" });
+            }
+        }
+
+        // 재연결 요청
+        if (type === "RECONNECT_REQUEST") {
+            const {playerName, roomCode} = JSON.parse(event.data);
+            if(sokcet){
+                const request = JSON.stringify({
+                    type: "RECONNECT_REQUEST",
+                    playerName: playerName,
+                    roomCode: roomCode,
+                });
+                socket.send(request);
             }
         }
 
