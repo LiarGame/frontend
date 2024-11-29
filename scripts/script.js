@@ -47,13 +47,23 @@ worker.port.onmessage = (event) => {
   // event.data를 JSON으로 파싱
   const message = event.data;
   console.log(message);
-  sessionStorage.setItem("message", message);
   sessionStorage.setItem("playerList", JSON.stringify(message.playerList));
 
-  // if(message === "Disconnected"){
-  //   console.log("웹소켓 연결 끉킴")
-  //   // sessionStorage.clear();
-  // }
+  if(message === "Worker Reloaded"){
+    if(sessionStorage.getItem("myPlayer") !== null && sessionStorage.getItem("roomCode") !== null){
+      console.log("재연결 요청");
+      const playerName = sessionStorage.getItem("myPlayer");
+      const roomCode = sessionStorage.getItem("roomCode");
+      const request = JSON.stringify({
+        type: "RECONNECT_REQUEST",
+        playerName: playerName,
+        roomCode: roomCode
+      });
+      console.log(request);
+      worker.port.postMessage(request);
+      return;
+    }
+  }
 
   switch (message.type) {
     case "CREATE_ROOM_RESPONSE":
@@ -141,7 +151,7 @@ worker.port.onmessage = (event) => {
     case "VOTE_RESPONSE":
       console.log(message);
       break;
-
+    
     case "VOTE_RESULT":
       if(message.liarCaught) {
         if(message.liarName === sessionStorage.getItem("myPlayer")) {
