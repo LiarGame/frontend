@@ -74,14 +74,15 @@ onconnect = (e) => {
 
         // 재연결 요청
         if (type === "RECONNECT_REQUEST") {
-            const {playerName, roomCode} = JSON.parse(event.data);
-            if(sokcet){
+            const {roomCode} = JSON.parse(event.data);
+            if(socket){
                 const request = JSON.stringify({
                     type: "RECONNECT_REQUEST",
                     playerName: playerName,
                     roomCode: roomCode,
                 });
                 socket.send(request);
+                
             }
         }
 
