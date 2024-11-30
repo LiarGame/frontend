@@ -43,6 +43,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 });
 let lastMessage = null; //같은 SPEAK_RESPONSE가 중복 출력되지 않게 하기 위함
+let lastSpeakingPlayer = null;
 worker.port.onmessage = (event) => {
   // event.data를 JSON으로 파싱
   const message = event.data;
@@ -90,6 +91,7 @@ worker.port.onmessage = (event) => {
       sessionStorage.setItem("liar", message.liar);
       sessionStorage.setItem("topic", message.topic);
       sessionStorage.setItem("word", message.word);
+
       if (window.location.pathname.includes("html/invite.html")){
         if(isHost == false)
           {window.startGame();}
@@ -98,14 +100,28 @@ worker.port.onmessage = (event) => {
         }
       }
       break;
-
     case "SPEAK_RESPONSE":
+      // 발언 순서 관리
+      const nextPlayer = sessionStorage.getItem("nextPlayer");
+      const voteBtns = document.querySelectorAll(".voteBtn");
+
+      voteBtns.forEach((voteBtn) => {
+        voteBtn.classList.remove("currentSpeakingPlayer");
+        if(nextPlayer === voteBtn.textContent) {
+          voteBtn.classList.add("currentSpeakingPlayer");
+        }
+      });
       if (lastMessage === message.message) {
         //아무것도 안함
       }
       else {
         if(message.startDiscussFlag === true) {
-          Discuss();
+          setTimeout(() => {
+            voteBtns.forEach((voteBtn) => {
+              voteBtn.classList.remove("currentSpeakingPlayer");
+            });
+            Discuss();
+          },10);
         }
         lastMessage = message.message;
         sessionStorage.setItem("speakingPlayer", message.speakingPlayer);
@@ -127,10 +143,6 @@ worker.port.onmessage = (event) => {
           location.href = "html/liar-win.html";
         }
       }
-
-    // case "DISCUSS_START_RESPONSE":
-    //   Discuss();
-    //   break;
 
     case "DISCUSS_MESSAGE_RESPONSE":
       if (lastMessage === message.message) {
@@ -378,6 +390,10 @@ window.showChatDisplay = function () {
   if (chatDiv) {
     chatDiv.style.display = "block";
   }
+
+  // 발언 순서 관리
+  const HostVoteBtn = document.querySelector(".voteBtn");
+  HostVoteBtn.classList.add("currentSpeakingPlayer");
 };
 
 window.speakKeyword = function () {
