@@ -14,6 +14,12 @@ document.addEventListener("DOMContentLoaded", () => {
     renderPlayerList(JSON.parse(sessionStorage.getItem("playerList")));
   }
 
+  if (currentPath.includes("html/invite.html") && !isHost) {
+    renderPlayerList(JSON.parse(sessionStorage.getItem("playerList")));
+  }
+
+  
+
 
   if(isFinal == true){
     console.log("안녕하세요?")
@@ -74,9 +80,10 @@ worker.port.onmessage = (event) => {
 
     case "JOIN_RESPONSE":
       if (window.location.pathname.includes("html/invite.html")) {
-        const playerList = JSON.parse(sessionStorage.getItem("playerList"));
+        renderPlayerList(message.playerList);
+      } else{
+        sessionStorage.setItem("playerList", JSON.stringify(message.playerList));
         console.log(message.playerList);
-        renderPlayerList(playerList);
       }
       // if (window.location.pathname.includes("html/room-guest.html")) {
       //   const playerList = message.playerList; // 배열이어야 함
