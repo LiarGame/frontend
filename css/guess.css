@@ -76,3 +76,8 @@ input[type="text"] {
     margin-left: 5px;
     cursor: pointer;
 }
+
+.liar-text {
+    color: #F44336; /* 빨간색 */
+    display: inline-block;
+}
