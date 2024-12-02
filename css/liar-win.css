@@ -1,118 +1,129 @@
 /* style.css */
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: Arial, sans-serif;
-  }
-  
-  body {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    background-color: #f0f0f0;
-  }
-  
-  .result-container {
-    background-color: white;
-    border-radius: 15px;
-    padding: 40px 20px;
-    width: 743px;
-    height: 847px;
-    text-align: center;
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
-  }
-  
-  .result-title {
-    font-size: 48px;
-    font-weight: bold;
-    margin-bottom: 55px;
-    
-  }
-  
-  .keyword {
-    font-size: 24px;
-    font-family : "Inter-Regular", Helvetica;
-    margin-bottom: 55px;
-    color: #000000;
-  }
-  
-  .roles {
-    display: flex;
-    justify-content: space-around;
-    margin-bottom: 40px;
-    
-  }
-  
-  
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Arial, sans-serif;
+}
 
-  .citizen, .liar {
-    text-align: center;
-  }
-  
-  .citizen h2, .liar h2 {
-    font-size : 32px;
-    font-family : "Inter-Bold", Helvetica;
-    font-weight: bold;
-    margin-bottom: 15px;
-  }
-  
-  .player {
-    background-color: #f8f8f8;
-    background-color : #ffffff;
-    opacity : 0.4;
-    border-radius : 20px;
-    width : 123px;
-    height : 71px;
-    padding: 10px 15px;
-    border-radius: 10px;
-    align-items: center;
-    margin: 50px 0;
-    justify-content: center;
-    font-size: 30px;
-    color: #333;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  }
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #f0f0f0;
+}
 
-  .player-liar {
-    background-color: #f8f8f8;
-    background-color : #ffffff;
-   
-    border-radius : 20px;
-    font-family : "Inter-Regular", Helvetica;
-    width : 123px;
-    height : 71px;
-    padding: 10px 15px;
-    border-radius: 10px;
-    align-items: center;
-    margin: 50px 0;
-    justify-content: center;
-    font-size: 30px;
-    color: #000000;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  }
+.result-container {
+  background-color: white;
+  border-radius: 15px;
+  padding: 40px 20px;
+  width: 743px;
+  height: 847px;
+  text-align: center;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+}
+
+.result-title {
+  font-size: 48px;
+  font-weight: bold;
+  margin-bottom: 65px;
   
-  .buttons {
-    display: flex;
-    justify-content: center;
-    gap: 40px;
-    margin-top: 50px;
-  }
+}
+
+.keyword {
+  font-size: 24px;
+  font-family : "Inter-Regular", Helvetica;
+  margin-bottom: 65px;
+  color: #000000;
+}
+
+.roles {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 40px;
   
-  button {
-    background-color: #333;
-    color: white;
-    font-weight: bold;
-    font-size: 1em;
-    padding: 12px 30px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-  }
-  
-  button:hover {
-    background-color: #555;
-  }
-  
+}
+
+
+
+.citizen, .liar {
+  text-align: center;
+}
+
+.citizen h2, .liar h2 {
+  font-size : 45px;
+  font-family : "Inter-Bold", Helvetica;
+  font-weight: bold;
+  margin-bottom: 15px;
+}
+
+.player {
+  opacity : 0.4;
+  border-radius : 20px;
+  font-weight: 600;
+  width : 140px;
+  height : 71px;
+  padding: 10px 15px;
+  border-radius: 10px;
+  align-items: center;
+  margin: 50px 0;
+  justify-content: center;
+  font-size: 34px;
+  color: #4f4f4f;
+}
+
+.player-liar {
+  font-weight: bold;
+  border-radius : 20px;
+  font-family : "Inter-Regular", Helvetica;
+  width : 140px;
+  height : 71px;
+  padding: 10px 15px;
+  border-radius: 10px;
+  align-items: center;
+  margin: 50px 0;
+  justify-content: center;
+  font-size: 34px;
+  color: #f44336;
+}
+
+.buttons {
+display: flex;
+justify-content: center;
+gap: 40px;
+margin-top: 50px;
+}
+
+button {
+background-color: white; /* 흰색 배경 */
+color: #333333; /* 회색 텍스트 */
+font-weight: 600;
+font-size: 1.1em;
+padding: 14px 36px; /* 패딩을 더 넓게 */
+border: none;
+border-radius: 8px; /* 더 부드러운 모서리 */
+cursor: pointer;
+box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 버튼에 그림자 추가 */
+transition: all 0.3s ease; /* 모든 변화를 부드럽게 */
+}
+
+/* hover 시 효과 */
+button:hover {
+background-color: #f7f7f7; /* hover 시 배경 색상 */
+box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2); /* 그림자 강조 */
+transform: translateY(-2px); /* 떠오르는 효과 */
+}
+
+/* 클릭 시 효과 */
+button:active {
+background-color: #e0e0e0; /* 클릭 시 배경 색상 */
+box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2); /* 그림자 크기 감소 */
+transform: translateY(2px); /* 눌리는 효과 */
+}
+
+/* focus 시 테두리 강조 */
+button:focus {
+outline: none; /* 기본 테두리 제거 */
+border: 2px solid #4CAF50; /* focus 시 테두리 추가 */
+}
