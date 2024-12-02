@@ -2,9 +2,11 @@ const worker = new SharedWorker("../html/worker.js");
 worker.port.start();
 
 window.isHost = false; // 방장 여부
-sessionStorage.getItem("isHost") === "true" ? (isHost = true) : (isHost = false);
-let roomCode = 12345; // 임시 방 코드
 window.isFinal = false; // 최종 답 제출 여부
+sessionStorage.getItem("isHost") === "true" ? (isHost = true) : (isHost = false);
+sessionStorage.getItem("isFinal") === "true" ? (isFinal = true) : (isFinal = false);
+let roomCode = 12345; // 임시 방 코드
+
 
 document.addEventListener("DOMContentLoaded", () => {
   const currentPath = window.location.pathname;
@@ -18,10 +20,7 @@ document.addEventListener("DOMContentLoaded", () => {
     renderPlayerList(JSON.parse(sessionStorage.getItem("playerList")));
   }
 
-  
-
-
-  if(isFinal == true){
+  if(isFinal === true){
     console.log("안녕하세요?")
     const citizenData = sessionStorage.getItem("citizen"); // 시민팀
     const liarName = sessionStorage.getItem("liarName"); // 라이어
@@ -140,10 +139,11 @@ worker.port.onmessage = (event) => {
       // 게임 결과화면
     case "GAME_RESULT":
       console.log("게임 종료 요청이 왔어요");
-      sessionStorage.setItem("citizen", JSON.stringify(message.winner));
-      sessionStorage.setItem("keyWord", message.word);
+      sessionStorage.setItem("citizen", JSON.stringify(message.citizen));
       sessionStorage.setItem("liarName", message.liarName[0]);
+
       isFinal = true;
+      sessionStorage.setItem("isFinal", isFinal);
 
       const liarName = message.liarName[0];
       const isLiarWinner = message.winner.includes(liarName); // 라이어가 승자 목록에 포함되는지 확인
