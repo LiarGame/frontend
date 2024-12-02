@@ -424,8 +424,7 @@ window.Discuss = function () {
   secondPTag.classList.add("secondPTagStyle");
   contentDiv.appendChild(secondPTag);
 
-  // 테스트용 축소
-  let second = 5;
+  let second = 60;
   const countdown = setInterval(() => {
     secondPTag.textContent = second; // 남은 시간 표시
     second--; // 1초 감소
