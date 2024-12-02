@@ -24,7 +24,7 @@ document.addEventListener("DOMContentLoaded", () => {
     console.log("안녕하세요?")
     const citizenData = sessionStorage.getItem("citizen"); // 시민팀
     const liarName = sessionStorage.getItem("liarName"); // 라이어
-    const keyword = sessionStorage.getItem("keyWord"); // 제시어
+    const keyword = sessionStorage.getItem("word"); // 제시어
 
     const citizenList = JSON.parse(citizenData); // 저장된 시민 데이터가 JSON 배열이라고 가정
     const citizenContainer = document.getElementById("citizen-list");
